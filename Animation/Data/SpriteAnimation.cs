@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NestedAssets;
+using System;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -23,6 +25,17 @@ public class SpriteAnimation : ScriptableObject
     [Tooltip("Use this field to select frame sequence (by indexes) if your sprite sheet contains multiple animations. X for offset, Y for count. (0, 0) value takes all texture as default.")]
     public FrameRangeData FrameRange;
     public float[] FrameDurations = { 0.1f };
+
+    [Tooltip("Défini si l'animation doit boucler après sa dernière trame")]
+    public bool animationABoucler;
+
+    [Tooltip("Défini si l'animation est en pause ou non")]
+    public bool animationEnPause;
+
+    // Attention, les transitions ne sont pas récursives.
+    [Tooltip("Liste des animations à effectuer une fois que celle-ci est terminée")]
+    [NestedAssetsList]
+    public List<SpriteAnimationTransition> spritesTransitions;
 
     #region Editor
 #if UNITY_EDITOR
