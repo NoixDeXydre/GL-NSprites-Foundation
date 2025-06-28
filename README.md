@@ -25,6 +25,7 @@ Also, before working with this package please read the [NSprites documentation](
 ### Requirements
 
 - [NSprites v4.0.0+](https://github.com/Antoshidza/NSprites)
+- [NestedAssets](https://github.com/Antoshidza/NSprites)
 - Unity v2022.2.3+
 - Universal RP v14.0.6+
 - Entities v1.0.0-pre.65+
