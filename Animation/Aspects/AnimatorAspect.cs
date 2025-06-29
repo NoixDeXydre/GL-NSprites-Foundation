@@ -10,6 +10,7 @@ namespace NSprites
         private readonly RefRW<AnimationIndex> _animationIndex;
         private readonly RefRW<AnimationTimer> _animationTimer;
         private readonly RefRW<FrameIndex> _frameIndex;
+        private readonly RefRW<AnimationState> _animationState;
         private readonly RefRO<AnimationSetLink> _animationSetLink;
 
         public void SetAnimation(int toAnimationIndex, in double worldTime)
@@ -37,6 +38,11 @@ namespace NSprites
                 // animation to 1st frame after we've modified it
                 _frameIndex.ValueRW.value = 0;
                 _animationTimer.ValueRW.value = worldTime;
+
+                // Ici on met l'état de l'animation de base.
+                _animationState.ValueRW.loop = animData.loop;
+                _animationState.ValueRW.pause = animData.pause;
+                _animationState.ValueRW.hasRootAnimationFinished = false;
             }
         }
 
