@@ -1,4 +1,11 @@
-# NSprites Foundation
+# NSprites Foundation & Garden Lies
+
+Ce fork de NSprites Foundation est ciblée sur mon jeu Garden Lies. Il vise à améliorer ou à faciliter l'utilisation des animations.  
+
+Je ne garantis pas le fonctionnement de la librairie avec d'autres potentielles utilisations.  
+Il manque également de la documentation sur mes solutions implantées. Pour les intéressés, je vous invite donc à observer le code de ce projet.
+
+Faite attention, veillez à bien vérifier la compatibilité des [API graphiques avec NSprites](https://github.com/Antoshidza/NSprites/wiki/Compatibility).
 
 This package provides various solutions for Unity DOTS sprite rendering based on the [NSprites](https://github.com/Antoshidza/NSprites) package. While NSprites tries to be a flexible solution for all of your 2D sprite rendering needs, this project is more like a set of samples and useful tools. These tools may or may not be perfect for your use-case.
 
@@ -12,7 +19,7 @@ Also, before working with this package please read the [NSprites documentation](
 
 | **name**                                                                                  | **running** | description                                                                                                        |
 | :---------------------------------------------------------------------------------------- | :---------- |:-------------------------------------------------------------------------------------------------------------------|
-| [Components](https://github.com/Antoshidza/NSprites-Foundation/tree/main/Base/Components) | runtime     | Contains components to be used with NSprites                                                                       |
+| [Components](https://github.com/NoixDeXydre/GL-NSprites-Foundation/tree/main/Base/Components) | runtime     | Contains components to be used with NSprites                                                                       |
 | [Authoring](About/AuthoringWorkflow.md)                                                   | editor      | Bakes basic render data, uses all other parts                                                                      |
 | Render data registration                                                                  | runtime     | Register render data for NSprites render system                                                                    |
 | [Sorting](About/Sorting.md)                                                               | runtime     | Calculate SortingValue depending on 2D position to use in shader                                                   |
@@ -33,12 +40,12 @@ Also, before working with this package please read the [NSprites documentation](
 ### [Install via Package Manager](https://docs.unity3d.com/2021.3/Documentation/Manual/upm-ui-giturl.html)
 
 - Window -> Package Manager -> + button -> Add package from git url
-- Paste `https://github.com/Antoshidza/NSprites-Foundation.git`
+- Paste `https://github.com/NoixDeXydre/GL-NSprites-Foundation.git`
 
 ### Install via git submodule
 
 - `cd` to your project's `/Packages` folder
-- Run `git submodule https://github.com/Antoshidza/NSprites-Foundation.git`
+- Run `git submodule https://github.com/NoixDeXydre/GL-NSprites-Foundation.git`
 
 ### Install via .unitypackage (recommended)
 
