@@ -33,7 +33,7 @@ namespace NSprites.Authoring
                 return;
             }
             
-            #region create animation blob asset
+            #region création blob liste animations
             var blobBuilder = new BlobBuilder(Allocator.Temp); //can't use `using` keyword because there is extension which use this + ref
             ref var root = ref blobBuilder.ConstructRoot<BlobArray<SpriteAnimationBlobData>>();
             var animations = animationSet.Animations;
@@ -42,7 +42,37 @@ namespace NSprites.Authoring
             var animIndex = 0;
             foreach (var anim in animations)
             {
+
                 var animData = anim.data;
+
+                // Construction des transitions
+
+                var blobBuilderTransitions = new BlobBuilder(Allocator.Temp);
+                ref var rootTransitions = ref blobBuilderTransitions.ConstructRoot<BlobArray<SpriteAnimationTransitionBlobData>>();
+                var transitionsArray = blobBuilder.Allocate(ref rootTransitions, animData.SpritesTransitions.Count);
+                var transitionsIndex = 0;
+                foreach (var transition in animData.SpritesTransitions)
+                {
+                    
+                    transitionsArray[transitionsIndex] = new SpriteAnimationTransitionBlobData
+                    {
+                        GridSize = transition.spriteAnimation.FrameCount,
+                        FrameRange = transition.spriteAnimation.FrameRange,
+                        UVAtlas = NSpritesUtils.GetTextureST(transition.spriteAnimation.SpriteSheet),
+                        AnimationDuration = transition.spriteAnimation.FrameDurations.Sum()
+                        // FrameDuration - allocate lately
+                    };
+
+                    var durationsTransition = blobBuilder.Allocate(ref transitionsArray[transitionsIndex].FrameDurations, transition.spriteAnimation.FrameDurations.Length);
+                    for (int di = 0; di < durationsTransition.Length; di++)
+                        durationsTransition[di] = animData.FrameDurations[di];
+
+                    transitionsIndex++;
+                }
+
+                var blobAssetTransitionReference = blobBuilderTransitions.CreateBlobAssetReference<BlobArray<SpriteAnimationTransitionBlobData>>(Allocator.Persistent);
+                baker.AddBlobAsset(ref blobAssetTransitionReference, out _);
+                blobBuilderTransitions.Dispose();
 
                 animationArray[animIndex] = new SpriteAnimationBlobData
                 {
@@ -52,7 +82,8 @@ namespace NSprites.Authoring
                         ? new int2(0, animData.FrameCount.x * animData.FrameCount.y)
                         : animData.FrameRange,
                     UVAtlas = NSpritesUtils.GetTextureST(animData.SpriteSheet),
-                    AnimationDuration = animData.FrameDurations.Sum()
+                    AnimationDuration = animData.FrameDurations.Sum(),
+                    AnimationTransitions = blobAssetTransitionReference
                     // FrameDuration - allocate lately
                 };
 
@@ -71,8 +102,17 @@ namespace NSprites.Authoring
             ref var initialAnim = ref blobAssetReference.Value[initialAnimationIndex];
 
             baker.AddComponent(entity, new AnimationSetLink { value = blobAssetReference });
+
             baker.AddComponent(entity, new AnimationIndex { value = initialAnimationIndex });
             baker.AddComponent(entity, new AnimationTimer { value = initialAnim.FrameDurations[0] });
+            baker.AddComponent(entity, new TransitionIndex { value = 0 });
+
+            baker.AddComponent(entity, new AnimationState
+            {
+                loop = false, // Valeurs par défaut
+                pause = false
+            });
+
             baker.AddComponent<FrameIndex>(entity);
             
             baker.AddComponent(entity, new MainTexSTInitial { value = initialAnim.UVAtlas });

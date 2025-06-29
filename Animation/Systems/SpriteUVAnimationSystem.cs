@@ -23,6 +23,7 @@ namespace NSprites
                                     in AnimationSetLink animationSet,
                                     in AnimationIndex animationIndex)
             {
+
                 var timerDelta = Time - animationTimer.value;
 
                 if (timerDelta < 0f) 

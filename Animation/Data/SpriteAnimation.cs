@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using static NSprites.SpriteAnimationSet;
 
 [CreateAssetMenu(fileName = "NewNSpriteAnimation", menuName = "NSprites/Animation (frame sequence)")]
 public class SpriteAnimation : ScriptableObject
@@ -32,10 +33,13 @@ public class SpriteAnimation : ScriptableObject
     [Tooltip("Défini si l'animation est en pause ou non")]
     public bool animationEnPause;
 
+    [SerializeField]
+    [NestedAssetsList]
+    private SpriteAnimationTransition[] _spritesTransitions;
+
     // Attention, les transitions ne sont pas récursives.
     [Tooltip("Liste des animations à effectuer une fois que celle-ci est terminée")]
-    [NestedAssetsList]
-    public List<SpriteAnimationTransition> spritesTransitions;
+    public IReadOnlyCollection<SpriteAnimationTransition> SpritesTransitions => _spritesTransitions;
 
     #region Editor
 #if UNITY_EDITOR

@@ -3,9 +3,8 @@ using Unity.Mathematics;
 
 namespace NSprites
 {
-    public struct SpriteAnimationBlobData
+    public struct SpriteAnimationTransitionBlobData
     {
-        public int ID;
         public float4 UVAtlas;
         public int2 GridSize;
         public int2 FrameRange;
