@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Unity.Collections;
+﻿using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -59,17 +58,13 @@ namespace NSprites.Authoring
                         GridSize = transition.spriteAnimation.FrameCount,
                         FrameRange = transition.spriteAnimation.FrameRange,
                         UVAtlas = NSpritesUtils.GetTextureST(transition.spriteAnimation.SpriteSheet),
-                        AnimationDuration = transition.spriteAnimation.FrameDurations.Sum(),
+                        FramesDuration = transition.spriteAnimation.FramesDuration,
                         // FrameDuration - allocate lately
 
                         loop = transition.spriteAnimation.animationABoucler,
                         pause = transition.spriteAnimation.animationEnPause,
                         redo_animation = transition.retourAnimationRacine
                     };
-
-                    var durationsTransition = blobBuilderTransitions.Allocate(ref transitionsArray[transitionsIndex].FrameDurations, transition.spriteAnimation.FrameDurations.Length);
-                    for (int di = 0; di < durationsTransition.Length; di++)
-                        durationsTransition[di] = animData.FrameDurations[di];
 
                     transitionsIndex++;
                 }
@@ -86,17 +81,12 @@ namespace NSprites.Authoring
                         ? new int2(0, animData.FrameCount.x * animData.FrameCount.y)
                         : animData.FrameRange,
                     UVAtlas = NSpritesUtils.GetTextureST(animData.SpriteSheet),
-                    AnimationDuration = animData.FrameDurations.Sum(),
                     AnimationTransitions = blobAssetTransitionReference,
-                    // FrameDuration - allocate lately
+                    FramesDuration = animData.FramesDuration,
 
                     loop = animData.animationABoucler,
                     pause = animData.animationEnPause
                 };
-
-                var durations = blobBuilder.Allocate(ref animationArray[animIndex].FrameDurations, animData.FrameDurations.Length);
-                for (int di = 0; di < durations.Length; di++)
-                    durations[di] = animData.FrameDurations[di];
 
                 animIndex++;
             }
@@ -111,7 +101,7 @@ namespace NSprites.Authoring
             baker.AddComponent(entity, new AnimationSetLink { value = blobAssetReference });
 
             baker.AddComponent(entity, new AnimationIndex { value = initialAnimationIndex });
-            baker.AddComponent(entity, new AnimationTimer { value = initialAnim.FrameDurations[0] });
+            baker.AddComponent(entity, new AnimationTimer { value = initialAnim.FramesDuration });
             baker.AddComponent(entity, new TransitionIndex { value = 0 });
 
             baker.AddComponent(entity, new AnimationState // Valeurs par défaut

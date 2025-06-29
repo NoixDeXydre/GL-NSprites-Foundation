@@ -21,7 +21,8 @@ namespace NSprites
             private void Execute(ref AnimationTimer animationTimer,
                                     ref FrameIndex frameIndex,
                                     ref UVAtlas uvAtlas,
-                                    in AnimationSetLink animationSet,
+                                    ref AnimationSetLink animationSet,
+                                    ref AnimationState animationState,
                                     in AnimationIndex animationIndex)
             {
 
@@ -30,27 +31,42 @@ namespace NSprites
                 if (timerDelta < 0f) 
                     return;
                 
-                ref var animData = ref animationSet.value.Value[animationIndex.value];
-
-                frameIndex.value = (frameIndex.value + 1) % animData.FrameCount;
-                var nextFrameDuration = animData.FrameDurations[frameIndex.value];
-                    
-                if (timerDelta >= animData.AnimationDuration)
+                // On ne change pas de trame si l'animation est en pause.
+                if (animationState.pause)
                 {
-                    var extraTime = (float)(timerDelta % animData.AnimationDuration);
-                    while (extraTime > nextFrameDuration)
-                    {
-                        extraTime -= nextFrameDuration;
-                        frameIndex.value = (frameIndex.value + 1) % animData.FrameCount;
-                        nextFrameDuration = animData.FrameDurations[frameIndex.value];
-                    }
-                    nextFrameDuration -= extraTime;
+                    return;
                 }
 
-                animationTimer.value = Time + nextFrameDuration;
-                    
+                ref var animData = ref animationSet.value.Value[animationIndex.value];
+
+                // Changement de trame
+                if (frameIndex.value + 1 == animData.FrameCount)
+                {
+                    animationState.pause = !animationState.loop; // Sans boucle, l'animation sera en pause au prochain cycle.
+                    frameIndex.value = 0;
+                } else
+                {
+                    frameIndex.value++;
+                }
+                
+                // Gère la durée de la trame
+                if (timerDelta >= animData.FramesDuration)
+                {
+                    var extraTime = (float)(timerDelta % animData.AnimationDuration);
+                    while (extraTime > animData.FramesDuration)
+                    {
+                        extraTime -= animData.FramesDuration;
+                        frameIndex.value = (frameIndex.value + 1) % animData.FrameCount;
+                    }
+                }
+                
+                animationTimer.value = Time + animData.FramesDuration;
+
+                // Mise à jour du découpage de la texture.
+
                 var textureFrameIndex = frameIndex.value + animData.FrameOffset;
                 var frameSize = new float2(animData.UVAtlas.xy / animData.GridSize);
+
                 // y should be inverted because 0.0 in UV starts from left bottom point but we assume 1st frame is at left up point
                 var framePosition = new int2(textureFrameIndex % animData.GridSize.x, animData.GridSize.y - 1 - textureFrameIndex / animData.GridSize.x);
                 uvAtlas = new UVAtlas { value = new float4(frameSize, animData.UVAtlas.zw + frameSize * framePosition) };

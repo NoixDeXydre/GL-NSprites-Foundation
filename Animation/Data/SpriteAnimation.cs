@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using static NSprites.SpriteAnimationSet;
 
 [CreateAssetMenu(fileName = "NewNSpriteAnimation", menuName = "NSprites/Animation (frame sequence)")]
 public class SpriteAnimation : ScriptableObject
@@ -18,14 +17,19 @@ public class SpriteAnimation : ScriptableObject
         
         public static implicit operator int2(FrameRangeData range) => new(range.Offset, range.Count);
     }
-    
+
     // Sprite here required because whe want to know UV of animation frame sequence on atlas
+    [Tooltip("Texture représentant l'ensemble des animations")]
     public Sprite SpriteSheet;
+
     [Tooltip("Set this value to frame count (rows and cols) of the whole texture even if it has multiple animations. It used to calculate UVs.")]
     public int2 FrameCount = new(1);
+
     [Tooltip("Use this field to select frame sequence (by indexes) if your sprite sheet contains multiple animations. X for offset, Y for count. (0, 0) value takes all texture as default.")]
     public FrameRangeData FrameRange;
-    public float[] FrameDurations = { 0.1f };
+
+    [Tooltip("Durée de chaque frames en secondes")]
+    public float FramesDuration = 0f;
 
     [Tooltip("Défini si l'animation doit boucler après sa dernière trame")]
     public bool animationABoucler;
@@ -50,19 +54,6 @@ public class SpriteAnimation : ScriptableObject
         CorrectFrameCount();
         var frameCount = FrameCount.x * FrameCount.y;
         CorrectFrameRange(frameCount);
-    }
-
-    [ContextMenu("Generate frame durations")]
-    private void GenerateFrameDurationByGridSize()
-    {
-        var frameCount = FrameCount.x * FrameCount.y;
-        var correctedFrameDurations = new float[frameCount];
-        var minLength = math.min(FrameDurations.Length, correctedFrameDurations.Length);
-        for (var i = 0; i < minLength; i++)
-            correctedFrameDurations[i] = FrameDurations[i];
-        for (var i = minLength; i < correctedFrameDurations.Length; i++)
-            correctedFrameDurations[i] = DefaultFrameDuration;
-        FrameDurations = correctedFrameDurations;
     }
 
     private void CorrectFrameCount() 

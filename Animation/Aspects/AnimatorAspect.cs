@@ -35,7 +35,7 @@ namespace NSprites
                 _animationIndex.ValueRW.value = setToAnimIndex;
                 // here we want to set last frame and timer to 0 (equal to current time) to force animation system instantly switch
                 // animation to 1st frame after we've modified it
-                _frameIndex.ValueRW.value = animData.FrameDurations.Length - 1;
+                _frameIndex.ValueRW.value = 0;
                 _animationTimer.ValueRW.value = worldTime;
             }
         }
@@ -44,7 +44,7 @@ namespace NSprites
         {
             ref var animData = ref _animationSetLink.ValueRO.value.Value[_animationIndex.ValueRO.value];
             _frameIndex.ValueRW.value = frameIndex;
-            _animationTimer.ValueRW.value = worldTime + animData.FrameDurations[frameIndex];
+            _animationTimer.ValueRW.value = worldTime + animData.FramesDuration;
         }
 
         public void ResetAnimation(in double worldTime) =>

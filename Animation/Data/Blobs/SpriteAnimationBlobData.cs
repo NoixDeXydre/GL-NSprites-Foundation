@@ -9,7 +9,7 @@ namespace NSprites
         public float4 UVAtlas;
         public int2 GridSize;
         public int2 FrameRange;
-        public BlobArray<float> FrameDurations;
+        public float FramesDuration;
         public float AnimationDuration;
 
         public bool loop;

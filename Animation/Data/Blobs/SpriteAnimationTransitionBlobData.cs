@@ -1,5 +1,4 @@
-﻿using Unity.Entities;
-using Unity.Mathematics;
+﻿using Unity.Mathematics;
 
 namespace NSprites
 {
@@ -8,8 +7,7 @@ namespace NSprites
         public float4 UVAtlas;
         public int2 GridSize;
         public int2 FrameRange;
-        public BlobArray<float> FrameDurations;
-        public float AnimationDuration;
+        public float FramesDuration;
 
         public bool loop;
         public bool pause;
