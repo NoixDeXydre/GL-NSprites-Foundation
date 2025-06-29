@@ -5,10 +5,11 @@ using Unity.Burst;
 namespace NSprites
 {
     // TODO: check animation system can work with different frame size animations 
-    
+
     /// Compare <see cref="AnimationTimer"/> with global time and switch <see cref="FrameIndex"/> when timer expired.
     /// Perform only not-culled entities. Restore <see cref="FrameIndex"/> and duration time for entities which be culled for some time.
     /// Somehow calculations goes a bit wrong and unculled entities gets synchronized, don't know how to fix
+    [BurstCompile]
     public partial struct SpriteUVAnimationSystem : ISystem
     {
         [BurstCompile]
