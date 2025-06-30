@@ -11,7 +11,7 @@
 // NOTE: some graphics API have problems with how NSprites updates Reactive / Static properties, if you encountered such situation,
 // then try to use only EachUpdate mode and access buffers like it described in first section
 
-Shader "Universal Render Pipeline/2D/SimpleSpriteShader"
+Shader "Universal Render Pipeline/2D/NSpritesShaderLit"
 {
     Properties
     {
@@ -20,6 +20,8 @@ Shader "Universal Render Pipeline/2D/SimpleSpriteShader"
 
     HLSLINCLUDE
     #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/SurfaceInput.hlsl"
 
     CBUFFER_START(UnityPerMaterial)
     CBUFFER_END
@@ -38,8 +40,8 @@ Shader "Universal Render Pipeline/2D/SimpleSpriteShader"
             Cull Off
 
             HLSLPROGRAM
-            #pragma vertex UnlitVertex
-            #pragma fragment UnlitFragment
+            #pragma vertex LitVertex
+            #pragma fragment LitFragment
 
             #pragma target 4.5
             //#pragma exclude_renderers gles gles3 glcore
@@ -110,7 +112,7 @@ Shader "Universal Render Pipeline/2D/SimpleSpriteShader"
                 return toMin + (value - fromMin) * (toMax - toMin) / (fromMax - fromMin);
             }
             
-            Varyings UnlitVertex(Attributes attributes, uint instanceID : SV_InstanceID)
+            Varyings LitVertex(Attributes attributes, uint instanceID : SV_InstanceID)
             {
                 Varyings varyings = (Varyings)0;
 
@@ -150,22 +152,27 @@ Shader "Universal Render Pipeline/2D/SimpleSpriteShader"
                 return varyings;
             }
 
-            float4 UnlitFragment(Varyings varyings, uint instanceID : SV_InstanceID) : SV_Target
+            float4 LitFragment(Varyings varyings, uint instanceID : SV_InstanceID) : SV_Target
             {
-#if defined(UNITY_INSTANCING_ENABLED) || defined(UNITY_PROCEDURAL_INSTANCING_ENABLED) || defined(UNITY_STEREO_INSTANCING_ENABLED)
+            #if defined(UNITY_INSTANCING_ENABLED)
                 int propertyIndex = _propertyPointers[instanceID];
                 float4 uvAtlas = _uvAtlasBuffer[propertyIndex];
-#else
+            #else
                 float4 uvAtlas = float4(1, 1, 0, 0);
-#endif
+            #endif
 
-                // finally frac UV and locate texture on atlas, now our UV is inside actual texture bounds (repeated)
-                varyings.uv = TilingAndOffset(frac(varyings.uv), uvAtlas.xy, uvAtlas.zw);
+                float2 uv = TilingAndOffset(frac(varyings.uv), uvAtlas.xy, uvAtlas.zw);
+                float4 texColor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
+                clip(texColor.a - 0.5);
 
-                float4 texColor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, varyings.uv);
-                clip(texColor.w - 0.5);
+                // Simulate Lambert lighting with main directional light
+                Light mainLight = GetMainLight();
 
-                return texColor;
+                float3 normal = float3(0, 0, -1); // Flat sprite normal
+                float NdotL = saturate(dot(normal, mainLight.direction));
+                float3 litColor = texColor.rgb * mainLight.color.rgb * NdotL;
+
+                return float4(litColor, texColor.a);
             }
             ENDHLSL
         }
