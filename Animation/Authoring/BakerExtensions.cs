@@ -59,7 +59,7 @@ namespace NSprites.Authoring
                         FrameRange = transition.spriteAnimation.FrameRange,
                         UVAtlas = NSpritesUtils.GetTextureST(transition.spriteAnimation.SpriteSheet),
                         FramesDuration = transition.spriteAnimation.FramesDuration,
-                        // FrameDuration - allocate lately
+                        AnimationDuration = animData.FramesDuration * transition.spriteAnimation.FrameCount.x * transition.spriteAnimation.FrameCount.y,
 
                         loop = transition.spriteAnimation.animationABoucler,
                         pause = transition.spriteAnimation.animationEnPause,
@@ -83,6 +83,7 @@ namespace NSprites.Authoring
                     UVAtlas = NSpritesUtils.GetTextureST(animData.SpriteSheet),
                     AnimationTransitions = blobAssetTransitionReference,
                     FramesDuration = animData.FramesDuration,
+                    AnimationDuration = animData.FramesDuration * animData.FrameCount.x * animData.FrameCount.y,
 
                     loop = animData.animationABoucler,
                     pause = animData.animationEnPause

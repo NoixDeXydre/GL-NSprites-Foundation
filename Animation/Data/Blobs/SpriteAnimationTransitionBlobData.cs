@@ -8,6 +8,7 @@ namespace NSprites
         public int2 GridSize;
         public int2 FrameRange;
         public float FramesDuration;
+        public float AnimationDuration; // Calculé pendant le baking
 
         public bool loop;
         public bool pause;
