@@ -4,14 +4,24 @@ namespace NSprites
 {
     public readonly partial struct AnimatorAspect : IAspect
     {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+
         private readonly Entity _entity;
-#endif
+
         private readonly RefRW<AnimationIndex> _animationIndex;
         private readonly RefRW<AnimationTimer> _animationTimer;
         private readonly RefRW<FrameIndex> _frameIndex;
         private readonly RefRW<AnimationState> _animationState;
         private readonly RefRO<AnimationSetLink> _animationSetLink;
+
+        public void ChangeLoopState(bool isLoop)
+        {
+            _animationState.ValueRW.loop = isLoop;
+        }
+
+        public void ChangePauseState(bool isPause)
+        {
+            _animationState.ValueRW.pause = isPause;
+        }
 
         public void SetAnimation(int toAnimationIndex, in double worldTime)
         {
