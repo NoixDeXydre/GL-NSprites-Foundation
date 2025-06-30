@@ -37,8 +37,7 @@ namespace NSprites
                 frameIndex.value++;
                 if (frameIndex.value == animData.FrameCount)
                 {
-                    animationState.hasRootAnimationFinished = animationState.pause 
-                        = !animationState.loop;
+                    animationState.pause = !animationState.loop;
                 }
 
                 frameIndex.value = frameIndex.value % animData.FrameCount;  // Changement de trame

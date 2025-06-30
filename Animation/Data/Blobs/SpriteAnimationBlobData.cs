@@ -17,8 +17,5 @@ namespace NSprites
 
         public int FrameOffset => FrameRange.x;
         public int FrameCount => FrameRange.y;
-
-        // Transitions possibles d'une animation
-        public BlobAssetReference<BlobArray<SpriteAnimationTransitionBlobData>> AnimationTransitions;
     }
 }

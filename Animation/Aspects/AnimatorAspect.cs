@@ -42,7 +42,6 @@ namespace NSprites
                 // Ici on met l'état de l'animation de base.
                 _animationState.ValueRW.loop = animData.loop;
                 _animationState.ValueRW.pause = animData.pause;
-                _animationState.ValueRW.hasRootAnimationFinished = false;
             }
         }
 

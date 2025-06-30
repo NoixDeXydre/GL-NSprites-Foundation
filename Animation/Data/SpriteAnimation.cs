@@ -1,6 +1,4 @@
-﻿using NestedAssets;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -36,14 +34,6 @@ public class SpriteAnimation : ScriptableObject
 
     [Tooltip("Défini si l'animation est en pause ou non")]
     public bool animationEnPause;
-
-    [SerializeField]
-    [NestedAssetsList]
-    private SpriteAnimationTransition[] _spritesTransitions;
-
-    // Attention, les transitions ne sont pas récursives.
-    [Tooltip("Liste des animations à effectuer une fois que celle-ci est terminée")]
-    public IReadOnlyCollection<SpriteAnimationTransition> SpritesTransitions => _spritesTransitions;
 
     #region Editor
 #if UNITY_EDITOR
