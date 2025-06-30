@@ -30,6 +30,7 @@ namespace NSprites
                 throw new NSpritesException($"{nameof(AnimatorAspect)}.{nameof(SetAnimation)}: incorrect {nameof(toAnimationIndex)} was passed. {_entity} has no animation with such ID ({toAnimationIndex}) was found");
 #endif
 
+            // Remet à zéro les données et change l'animation.
             if (_animationIndex.ValueRO.value != setToAnimIndex)
             {
                 ref var animData = ref animSet[setToAnimIndex];

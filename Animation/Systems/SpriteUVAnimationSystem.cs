@@ -4,7 +4,6 @@ using Unity.Burst;
 
 namespace NSprites
 {
-    // TODO: check animation system can work with different frame size animations 
 
     /// Compare <see cref="AnimationTimer"/> with global time and switch <see cref="FrameIndex"/> when timer expired.
     /// Perform only not-culled entities. Restore <see cref="FrameIndex"/> and duration time for entities which be culled for some time.
@@ -26,27 +25,22 @@ namespace NSprites
                                     in AnimationIndex animationIndex)
             {
 
-                var timerDelta = Time - animationTimer.value;
-
                 // On ne change pas de trame si l'animation est en pause ou si du délais doit être écoulé.
+                var timerDelta = Time - animationTimer.value;
                 if (timerDelta < 0f || animationState.pause) 
                     return;
 
                 // On vérifie ici si l'animation à rencontré sa fin.
                 ref var animData = ref animationSet.value.Value[animationIndex.value];
-                frameIndex.value++;
-                if (frameIndex.value == animData.FrameCount)
-                {
-                    animationState.pause = !animationState.loop;
-                }
+                animationState.pause = ++frameIndex.value == animData.FrameCount && !animationState.loop;
 
                 frameIndex.value = frameIndex.value % animData.FrameCount;  // Changement de trame
 
                 // Gère les pics de lag (EXPERIMENTAL)
                 if (timerDelta >= animData.FramesDuration)
                 {
-                    var extraTime = (float)(timerDelta % animData.AnimationDuration);
-                    var decCount = (int)math.round((extraTime - animData.FramesDuration) / animData.FramesDuration);
+                    var extraTime = (float)(timerDelta % animData.AnimationDuration); // Temps à rattraper
+                    var decCount = (int)math.round((extraTime - animData.FramesDuration) / animData.FramesDuration); // Nombre de frames à passer
                     frameIndex.value = (frameIndex.value + decCount) % animData.FrameCount;
                 }
                 
