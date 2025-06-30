@@ -30,11 +30,11 @@ namespace NSprites
                 if (timerDelta < 0f || animationState.pause) 
                     return;
 
-                // On vérifie ici si l'animation à rencontré sa fin.
                 ref var animData = ref animationSet.value.Value[animationIndex.value];
-                animationState.pause = ++frameIndex.value == animData.FrameCount && !animationState.loop;
+                frameIndex.value = (frameIndex.value + 1) % animData.FrameCount;  // Changement de trame cycliquement
 
-                frameIndex.value = frameIndex.value % animData.FrameCount;  // Changement de trame
+                // On vérifie ici si l'animation à rencontré sa fin.
+                animationState.pause = frameIndex.value == 0 && !animationState.loop;
 
                 // Gère les pics de lag (EXPERIMENTAL)
                 if (timerDelta >= animData.FramesDuration)
