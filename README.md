@@ -1,6 +1,9 @@
 # NSprites Foundation & Garden Lies
 
-Ce fork de NSprites Foundation est ciblée sur mon jeu Garden Lies. Il vise à améliorer ou à faciliter l'utilisation des animations.  
+Ce fork de NSprites Foundation est ciblée sur mon jeu Garden Lies. Il vise à :
+- Améliorer ou à faciliter l'utilisation des animations.  
+- Rajouter des propriétés pour les sprites.  
+- Ajouter et modifier les shaders existants.  
 
 Je ne garantis pas le fonctionnement de la librairie avec d'autres potentielles utilisations.  
 Il manque également de la documentation sur mes solutions implantées. Pour les intéressés, je vous invite donc à observer le code de ce projet.
