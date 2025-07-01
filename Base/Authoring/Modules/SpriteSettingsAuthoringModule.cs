@@ -22,6 +22,7 @@ namespace NSprites.Authoring
         public DrawModeType DrawMode;
         public float4 TilingAndOffset = new(1f, 1f, 0f, 0f);
         public bool2 Flip;
+        public Color Color = Color.white;
 
         /// <summary>
         /// Bakes sprite default (for NSprites-Foundation package) such as
@@ -36,7 +37,7 @@ namespace NSprites.Authoring
         /// <param name="authoring">authoring monobehaviour</param>
         /// <param name="nativeSize">The native size of a sprite being baked. Needs because sprite and it's params can come from arbitrary source, so need to be passed</param>
         /// <param name="uvAtlas">The same as <see cref="nativeSize"/> should be passed, because of external sprite</param>
-        public void Bake<TAuthoring>(Baker<TAuthoring> baker, TAuthoring authoring, in float2 nativeSize, in float4 uvAtlas, in Color color)
+        public void Bake<TAuthoring>(Baker<TAuthoring> baker, TAuthoring authoring, in float2 nativeSize, in float4 uvAtlas)
             where TAuthoring : Component
         {
             var authoringTransform = authoring.transform;
@@ -50,7 +51,7 @@ namespace NSprites.Authoring
                 GetTilingAndOffsetByDrawMode(),
                 Pivot,
                 Size * nativeSize * new float2(authoringScale.x, authoringScale.y),
-                color,
+                Color,
                 flipX: Flip.x,
                 flipY: Flip.y
             );
