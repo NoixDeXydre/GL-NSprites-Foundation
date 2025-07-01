@@ -7,6 +7,7 @@ StructuredBuffer<float4x4> _positionBuffer;
 StructuredBuffer<float2> _pivotBuffer;
 StructuredBuffer<float2> _heightWidthBuffer;
 StructuredBuffer<int2> _flipBuffer;
+StructuredBuffer<float4> _colorBuffer;
 #endif
 
 float4x4 offset_matrix(const float2 input, const float2 scale)
