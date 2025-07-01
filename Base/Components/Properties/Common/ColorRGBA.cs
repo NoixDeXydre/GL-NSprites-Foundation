@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NSprites
 {
-    public struct MaterialColor : IComponentData
+    public struct ColorRGBA : IComponentData
     {
         public Color Value;
     }

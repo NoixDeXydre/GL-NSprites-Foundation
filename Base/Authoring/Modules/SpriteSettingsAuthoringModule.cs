@@ -22,7 +22,7 @@ namespace NSprites.Authoring
         public DrawModeType DrawMode;
         public float4 TilingAndOffset = new(1f, 1f, 0f, 0f);
         public bool2 Flip;
-        public Color Color = Color.white;
+        public UnityEngine.Color Color = UnityEngine.Color.white;
 
         /// <summary>
         /// Bakes sprite default (for NSprites-Foundation package) such as
