@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f114ff8e49e845d4bacdac67b12b8b31, type: 3}
-  m_Name: RegularSprite_PropertiesSet
+  m_Name: RegularNSprite_PropertiesSet
   m_EditorClassIdentifier: 
   propertiesRawData:
   - propertyName: _uvAtlasBuffer
