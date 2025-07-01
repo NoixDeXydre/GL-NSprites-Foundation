@@ -7,11 +7,7 @@
             "m_Id": "6449234a07194b64b81daba3b4705882"
         }
     ],
-    "m_Keywords": [
-        {
-            "m_Id": "10b1a383cfcf46af9bff0f0648be8a1c"
-        }
-    ],
+    "m_Keywords": [],
     "m_Dropdowns": [],
     "m_CategoryData": [
         {
@@ -1049,8 +1045,8 @@
     "m_ObjectId": "09ef3b95b6c84b63b00cba5319f3d018",
     "m_Title": "Atlasing",
     "m_Position": {
-        "x": -1293.599853515625,
-        "y": 356.0
+        "x": -1293.5999755859375,
+        "y": 355.99993896484377
     }
 }
 
@@ -1119,31 +1115,6 @@
     "m_Group": {
         "m_Id": "974bc9d4ceae4533b26c6a3cbc6d1634"
     }
-}
-
-{
-    "m_SGVersion": 1,
-    "m_Type": "UnityEditor.ShaderGraph.ShaderKeyword",
-    "m_ObjectId": "10b1a383cfcf46af9bff0f0648be8a1c",
-    "m_Guid": {
-        "m_GuidSerialized": "f353ba7e-3964-4887-97fc-a74d60243ca8"
-    },
-    "m_Name": "PROCEDURAL_INSTANCING_ON",
-    "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "PROCEDURAL_INSTANCING_ON",
-    "m_DefaultReferenceName": "_PROCEDURAL_INSTANCING_ON",
-    "m_OverrideReferenceName": "PROCEDURAL_INSTANCING_ON",
-    "m_GeneratePropertyBlock": true,
-    "m_UseCustomSlotLabel": false,
-    "m_CustomSlotLabel": "",
-    "m_DismissedVersion": 0,
-    "m_KeywordType": 0,
-    "m_KeywordDefinition": 1,
-    "m_KeywordScope": 1,
-    "m_KeywordStages": 63,
-    "m_Entries": [],
-    "m_Value": 1,
-    "m_IsEditable": true
 }
 
 {
@@ -1271,7 +1242,7 @@
     "m_ObjectId": "17141768eb6542818a32b253564323c9",
     "m_Title": "Tiling and Offset",
     "m_Position": {
-        "x": -1290.39990234375,
+        "x": -1290.4000244140625,
         "y": 40.79998779296875
     }
 }
@@ -2060,7 +2031,7 @@
     "m_ObjectId": "5b339dab1c0045e6875c4ee27b074b03",
     "m_Title": "Flipping",
     "m_Position": {
-        "x": -1675.9998779296875,
+        "x": -1676.7999267578125,
         "y": -568.0
     }
 }
@@ -2277,13 +2248,7 @@
     "m_FunctionName": "UV_TilingAndOffset",
     "m_FunctionSource": "",
     "m_FunctionSourceUsePragmas": true,
-    "m_FunctionBody": "#if defined(UNITY_INSTANCING_ENABLED) || defined(UNITY_PROCEDURAL_INSTANCING_ENABLED) || defined(UNITY_STEREO_INSTANCING_ENABLED)\nUV = _uvTilingAndOffsetBuffer[index];\n#else\nUV = (float4)0;\n#endif"
-}
-
-{
-    "m_SGVersion": 2,
-    "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalUnlitSubTarget",
-    "m_ObjectId": "69c9e780e518419b930e47aaf3d2d41d"
+    "m_FunctionBody": "#ifdef INSTANCING_ENABLED\nUV = _uvTilingAndOffsetBuffer[index];\n#else\nUV = (float4)0;\n#endif"
 }
 
 {
@@ -2755,7 +2720,7 @@
     "m_FunctionName": "GetColors",
     "m_FunctionSource": "",
     "m_FunctionSourceUsePragmas": true,
-    "m_FunctionBody": "#if defined(UNITY_INSTANCING_ENABLED) || defined(UNITY_PROCEDURAL_INSTANCING_ENABLED) || defined(UNITY_STEREO_INSTANCING_ENABLED)\ncolors = _colorBuffer[index];\n#else\ncolors = (float4)1;\n#endif"
+    "m_FunctionBody": "#ifdef INSTANCING_ENABLED\ncolors = _colorBuffer[index];\n#else\ncolors = (float4)1;\n#endif"
 }
 
 {
@@ -2964,8 +2929,8 @@
     "m_ObjectId": "974bc9d4ceae4533b26c6a3cbc6d1634",
     "m_Title": "Instancing + Matrix setup",
     "m_Position": {
-        "x": -478.39990234375,
-        "y": -558.4000244140625
+        "x": -478.4000244140625,
+        "y": -558.3999633789063
     }
 }
 
@@ -3051,7 +3016,7 @@
     "m_FunctionName": "Flip",
     "m_FunctionSource": "556c64c474394699bc0acda9175051ba",
     "m_FunctionSourceUsePragmas": true,
-    "m_FunctionBody": "#if defined(UNITY_INSTANCING_ENABLED) || defined(UNITY_PROCEDURAL_INSTANCING_ENABLED) || defined(UNITY_STEREO_INSTANCING_ENABLED)\nFlip = _flipBuffer[index];\n#else\nFlip = (float2)0;\n#endif"
+    "m_FunctionBody": "#ifdef INSTANCING_ENABLED\nFlip = _flipBuffer[index];\n#else\nFlip = (float2)0;\n#endif"
 }
 
 {
@@ -3280,7 +3245,7 @@
         "x"
     ],
     "m_Precision": 0,
-    "m_PreviewExpanded": true,
+    "m_PreviewExpanded": false,
     "m_DismissedVersion": 0,
     "m_PreviewMode": 0,
     "m_CustomColors": {
@@ -3855,9 +3820,6 @@
     "m_ChildObjectList": [
         {
             "m_Id": "6449234a07194b64b81daba3b4705882"
-        },
-        {
-            "m_Id": "10b1a383cfcf46af9bff0f0648be8a1c"
         }
     ]
 }
@@ -4008,7 +3970,7 @@
     "m_ObjectId": "e760e334f879489f855664f80dd46dcb",
     "m_Datas": [],
     "m_ActiveSubTarget": {
-        "m_Id": "69c9e780e518419b930e47aaf3d2d41d"
+        "m_Id": "f075d525ebeb43b8b4d0c7f668900d5b"
     },
     "m_AllowMaterialOverride": false,
     "m_SurfaceType": 1,
@@ -4150,6 +4112,12 @@
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
+}
+
+{
+    "m_SGVersion": 2,
+    "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalUnlitSubTarget",
+    "m_ObjectId": "f075d525ebeb43b8b4d0c7f668900d5b"
 }
 
 {

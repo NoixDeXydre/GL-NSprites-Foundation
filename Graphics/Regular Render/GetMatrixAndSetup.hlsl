@@ -8,6 +8,8 @@ StructuredBuffer<float2> _pivotBuffer;
 StructuredBuffer<float2> _heightWidthBuffer;
 StructuredBuffer<int2> _flipBuffer;
 StructuredBuffer<float4> _colorBuffer;
+
+#define INSTANCING_ENABLED
 #endif
 
 float4x4 offset_matrix(const float2 input, const float2 scale)
@@ -22,7 +24,7 @@ float4x4 offset_matrix(const float2 input, const float2 scale)
 
 void setup()
 {
-#if defined(UNITY_INSTANCING_ENABLED) || defined(UNITY_PROCEDURAL_INSTANCING_ENABLED) || defined(UNITY_STEREO_INSTANCING_ENABLED)
+#ifdef INSTANCING_ENABLED
     int propertyIndex = _propertyPointers[unity_InstanceID];
     float4x4 transform = _positionBuffer[propertyIndex];
     float2 pivot = _pivotBuffer[propertyIndex];
@@ -33,7 +35,7 @@ void setup()
 
 void PropertyPointer_float(in float instanceID, out float index)
 {
-#if defined(UNITY_INSTANCING_ENABLED) || defined(UNITY_PROCEDURAL_INSTANCING_ENABLED) || defined(UNITY_STEREO_INSTANCING_ENABLED)
+#ifdef INSTANCING_ENABLED
     index = _propertyPointers[(uint)instanceID];
 #else
     index = 0;
@@ -42,11 +44,11 @@ void PropertyPointer_float(in float instanceID, out float index)
 
 void UV_float(in float index, out float4 uv)
 {
-    #if defined(UNITY_INSTANCING_ENABLED) || defined(UNITY_PROCEDURAL_INSTANCING_ENABLED) || defined(UNITY_STEREO_INSTANCING_ENABLED)
+#ifdef INSTANCING_ENABLED
     uv = _uvAtlasBuffer[(uint)index];
-    #else
+#else
     uv = (float4)0;
-    #endif
+#endif
 }
 
 void InstancingSetup_float(in float3 IN, out float3 OUT)
