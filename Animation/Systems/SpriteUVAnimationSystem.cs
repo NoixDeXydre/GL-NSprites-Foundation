@@ -1,7 +1,6 @@
 ﻿using Unity.Mathematics;
 using Unity.Entities;
 using Unity.Burst;
-using UnityEngine;
 
 namespace NSprites
 {
