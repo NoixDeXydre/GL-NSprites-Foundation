@@ -7,8 +7,8 @@ using UnityEditor;
 
 namespace NSprites
 {
+
     [BurstCompile]
-    [DisableAutoCreation]
     public partial struct SpriteFrustumCullingSystem : ISystem
     {
         [BurstCompile]

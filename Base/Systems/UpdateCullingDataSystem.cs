@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace NSprites
 {
-    [DisableAutoCreation]
+
     [UpdateBefore(typeof(SpriteFrustumCullingSystem))]
     public partial struct UpdateCullingDataSystem : ISystem
     {
