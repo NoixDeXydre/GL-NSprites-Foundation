@@ -34,7 +34,6 @@ namespace NSprites
                 ref var animData = ref animationSet.value.Value[animationIndex.value];
                 var playback = animationState.playback;
                 frameIndex.value = IncrementFrames(frameIndex.value, 1 * playback, animData.FrameCount);
-                Debug.Log(frameIndex.value);
 
                 // On vérifie ici si l'animation à rencontré sa fin.
                 animationState.pause = frameIndex.value == 0 && !animationState.loop;
@@ -65,7 +64,7 @@ namespace NSprites
             state.Dependency = animationJob.ScheduleParallelByRef(state.Dependency);
         }
 
-        // Changement de trame cyclique (dans les deux sens.)
+        /// Changement de trame cyclique (dans les deux sens.)
         [BurstCompile]
         private static int IncrementFrames(int currentFrame, int incrementation, int totalFrames)
         {

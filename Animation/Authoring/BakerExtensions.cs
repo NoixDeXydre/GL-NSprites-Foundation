@@ -79,7 +79,7 @@ namespace NSprites.Authoring
             baker.AddComponent(entity, new AnimationState // Valeurs par défaut
             {
                 currentFramesDuration = initialAnim.FramesDuration,
-                currentAnimationDuration = initialAnim.FramesDuration * initialAnim.FrameCount,
+                currentAnimationDuration = initialAnim.AnimationDuration,
                 playback = initialAnim.playback,
                 loop = initialAnim.loop, 
                 pause = initialAnim.pause
