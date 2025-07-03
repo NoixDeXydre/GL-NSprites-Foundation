@@ -1,6 +1,7 @@
 ﻿using Unity.Mathematics;
 using Unity.Entities;
 using Unity.Burst;
+using UnityEngine;
 
 namespace NSprites
 {
@@ -31,17 +32,20 @@ namespace NSprites
                     return;
 
                 ref var animData = ref animationSet.value.Value[animationIndex.value];
-                frameIndex.value = (frameIndex.value + 1) % animData.FrameCount;  // Changement de trame cycliquement
+                var playback = animationState.playback;
+                frameIndex.value = IncrementFrames(frameIndex.value, 1 * playback, animData.FrameCount);
+                Debug.Log(frameIndex.value);
 
                 // On vérifie ici si l'animation à rencontré sa fin.
                 animationState.pause = frameIndex.value == 0 && !animationState.loop;
 
                 // Gère les pics de lag (EXPERIMENTAL)
-                if (timerDelta >= animData.FramesDuration)
+                var framesDuration = animationState.currentFramesDuration;
+                if (timerDelta >= framesDuration)
                 {
-                    var extraTime = (float)(timerDelta % animData.AnimationDuration); // Temps à rattraper
-                    var decCount = (int)math.round((extraTime - animData.FramesDuration) / animData.FramesDuration); // Nombre de frames à passer
-                    frameIndex.value = (frameIndex.value + decCount) % animData.FrameCount;
+                    var extraTime = (float)(timerDelta % framesDuration); // Temps à rattraper
+                    var decCount = (int)math.round((extraTime - framesDuration) / framesDuration); // Nombre de frames à passer
+                    frameIndex.value = IncrementFrames(frameIndex.value, decCount * playback, animData.FrameCount);
                 }
                 
                 animationTimer.value = Time + animData.FramesDuration;
@@ -55,10 +59,17 @@ namespace NSprites
         }
         
         [BurstCompile]
-        public void OnUpdate(ref SystemState state)
+        private void OnUpdate(ref SystemState state)
         {
             var animationJob = new AnimationJob { Time = SystemAPI.Time.ElapsedTime };
             state.Dependency = animationJob.ScheduleParallelByRef(state.Dependency);
+        }
+
+        // Changement de trame cyclique (dans les deux sens.)
+        [BurstCompile]
+        private static int IncrementFrames(int currentFrame, int incrementation, int totalFrames)
+        {
+            return ((currentFrame + incrementation) % totalFrames + totalFrames) % totalFrames;
         }
     }
 }

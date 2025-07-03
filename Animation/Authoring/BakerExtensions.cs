@@ -54,6 +54,7 @@ namespace NSprites.Authoring
                     FramesDuration = animData.FramesDuration,
                     AnimationDuration = animData.FramesDuration * animData.FrameCount.x * animData.FrameCount.y,
 
+                    playback = animData.typeAnimation,
                     loop = animData.animationABoucler,
                     pause = animData.animationEnPause
                 };
@@ -66,6 +67,8 @@ namespace NSprites.Authoring
             blobBuilder.Dispose();
             #endregion
 
+            #region ajout des composants
+
             ref var initialAnim = ref blobAssetReference.Value[initialAnimationIndex];
 
             baker.AddComponent(entity, new AnimationSetLink { value = blobAssetReference });
@@ -75,6 +78,9 @@ namespace NSprites.Authoring
 
             baker.AddComponent(entity, new AnimationState // Valeurs par défaut
             {
+                currentFramesDuration = initialAnim.FramesDuration,
+                currentAnimationDuration = initialAnim.FramesDuration * initialAnim.FrameCount,
+                playback = initialAnim.playback,
                 loop = initialAnim.loop, 
                 pause = initialAnim.pause
             });
@@ -82,6 +88,8 @@ namespace NSprites.Authoring
             baker.AddComponent<FrameIndex>(entity);
             
             baker.AddComponent(entity, new MainTexSTInitial { value = initialAnim.UVAtlas });
+
+            #endregion
         }
     }
 }

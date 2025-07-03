@@ -5,6 +5,16 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewNSpriteAnimation", menuName = "NSprites/Animation (frame sequence)")]
 public class SpriteAnimation : ScriptableObject
 {
+
+    /// <summary>
+    /// Type de lecture de l'animation
+    /// </summary>
+    public enum TypesLecture
+    {
+        lectureAvant = 1, // Une fois à l'avant
+        lectureArriere = -1 // Une fois en arrière
+    }
+
     [Serializable]
     public struct FrameRangeData
     {
@@ -29,6 +39,9 @@ public class SpriteAnimation : ScriptableObject
     [Tooltip("Durée de chaque frames en secondes")]
     public float FramesDuration = 0f;
 
+    [Tooltip("Type d'animation lors de la lecture")]
+    public int typeAnimation;
+
     [Tooltip("Défini si l'animation doit boucler après sa dernière trame")]
     public bool animationABoucler;
 
@@ -44,6 +57,7 @@ public class SpriteAnimation : ScriptableObject
         CorrectFrameCount();
         var frameCount = FrameCount.x * FrameCount.y;
         CorrectFrameRange(frameCount);
+        CorrectPlayback();
     }
 
     private void CorrectFrameCount() 
@@ -54,6 +68,15 @@ public class SpriteAnimation : ScriptableObject
         FrameRange.Offset = math.clamp(FrameRange.Offset,0, frameCount - 1);
         FrameRange.Count = math.clamp(FrameRange.Count,0, frameCount - FrameRange.Offset);
     }
+
+    private void CorrectPlayback()
+    {
+        if (typeAnimation != (int)TypesLecture.lectureAvant || typeAnimation != (int)TypesLecture.lectureArriere)
+        {
+            typeAnimation = (int)TypesLecture.lectureAvant;
+        }
+    }
+
 #endif
     #endregion
 }
