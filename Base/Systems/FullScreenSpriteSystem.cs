@@ -54,7 +54,7 @@ namespace NSprites
                     CameraPosition = cameraData.Position,
                     ScreenSize = cameraData.CullingBounds2D.Size
                 };
-                state.Dependency = recalculateSpriteJob.ScheduleByRef(state.Dependency);
+                state.Dependency = recalculateSpriteJob.ScheduleParallelByRef(state.Dependency);
             }
         }
     }
