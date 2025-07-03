@@ -85,6 +85,12 @@ namespace NSprites.Authoring
                 pause = initialAnim.pause
             });
 
+            baker.AddComponent(entity, new AnimationPlaybackType // Valeurs par défaut
+            {
+                forward = (int)SpriteAnimation.TypesLecture.lectureAvant,
+                backward = (int)SpriteAnimation.TypesLecture.lectureArriere,
+            });
+
             baker.AddComponent<FrameIndex>(entity);
             
             baker.AddComponent(entity, new MainTexSTInitial { value = initialAnim.UVAtlas });

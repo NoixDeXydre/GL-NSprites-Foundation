@@ -11,14 +11,15 @@ namespace NSprites
         private readonly RefRW<AnimationTimer> _animationTimer;
         private readonly RefRW<FrameIndex> _frameIndex;
         private readonly RefRW<AnimationState> _animationState;
+        private readonly RefRO<AnimationPlaybackType> _animationPlaybackType;
         private readonly RefRO<AnimationSetLink> _animationSetLink;
 
-        public void ChangeLoopState(bool isLoop)
+        public void SetLoopState(bool isLoop)
         {
             _animationState.ValueRW.loop = isLoop;
         }
 
-        public void ChangePauseState(bool isPause)
+        public void SetPauseState(bool isPause)
         {
             _animationState.ValueRW.pause = isPause;
         }
@@ -43,27 +44,62 @@ namespace NSprites
             // Remet à zéro les données et change l'animation.
             if (_animationIndex.ValueRO.value != setToAnimIndex)
             {
-                ref var animData = ref animSet[setToAnimIndex];
                 _animationIndex.ValueRW.value = setToAnimIndex;
-                // here we want to set last frame and timer to 0 (equal to current time) to force animation system instantly switch
-                // animation to 1st frame after we've modified it
-                _frameIndex.ValueRW.value = 0;
-                _animationTimer.ValueRW.value = worldTime;
-
-                // Ici on met l'état de l'animation de base.
-                _animationState.ValueRW.loop = animData.loop;
-                _animationState.ValueRW.pause = animData.pause;
+                ResetAnimation(worldTime);
             }
+        }
+
+        public void SetPlayback(int playback)
+        {
+
+            if (playback == _animationPlaybackType.ValueRO.forward || playback == _animationPlaybackType.ValueRO.backward)
+            {
+                _animationState.ValueRW.playback = playback;
+            }
+        }
+
+        public void SetFramesDuration(float framesDuration)
+        {
+            _animationState.ValueRW.currentFramesDuration = framesDuration;
+            _animationState.ValueRW.currentAnimationDuration = framesDuration 
+                * _animationSetLink.ValueRO.value.Value[_animationIndex.ValueRO.value].FrameCount;
         }
 
         public void SetToFrame(int frameIndex, in double worldTime)
         {
             ref var animData = ref _animationSetLink.ValueRO.value.Value[_animationIndex.ValueRO.value];
             _frameIndex.ValueRW.value = frameIndex;
-            _animationTimer.ValueRW.value = worldTime + animData.FramesDuration;
+            _animationTimer.ValueRW.value = worldTime + _animationState.ValueRO.currentFramesDuration;
         }
 
-        public void ResetAnimation(in double worldTime) =>
+        public void ResetLoop() => 
+            _animationState.ValueRW.loop = GetCurrentAnimation().loop;
+
+        public void ResetPause() =>
+            _animationState.ValueRW.pause = GetCurrentAnimation().pause;
+
+        public void ResetPlayback() =>
+            _animationState.ValueRW.playback = GetCurrentAnimation().playback;
+
+        public void ResetFramesDuration() =>
+            _animationState.ValueRW.currentFramesDuration = GetCurrentAnimation().FramesDuration;
+
+        public void ResetAnimationDuration() =>
+            _animationState.ValueRW.currentAnimationDuration = GetCurrentAnimation().AnimationDuration;
+
+        public void ResetAnimation(in double worldTime)
+        {
             SetToFrame(0, worldTime);
+            ResetLoop();
+            ResetPause();
+            ResetPlayback();
+            ResetFramesDuration();
+            ResetAnimationDuration();
+        }
+
+        private ref SpriteAnimationBlobData GetCurrentAnimation()
+        {
+            return ref _animationSetLink.ValueRO.value.Value[_animationIndex.ValueRO.value];
+        }
     }
 }
