@@ -1,13 +1,14 @@
 ﻿using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using static SpriteAnimation;
 
 namespace NSprites
 {
 
     // TODO adapter pour cause d'obsolescence : https://docs.unity3d.com/Packages/com.unity.entities@1.4/manual/upgrade-guide.html#change-entitiesforeach-code
 
-    public readonly partial struct AnimatorAspect : IAspect
+    public readonly partial struct AnimationManager : IAspect
     {
 
         private readonly Entity _entity;
@@ -17,7 +18,6 @@ namespace NSprites
         private readonly RefRW<FrameIndex> _frameIndex;
         private readonly RefRW<AnimationState> _animationState;
         private readonly RefRO<IndexedAnimationsName> _indexedAnimationsName;
-        private readonly RefRO<AnimationPlaybackType> _animationPlaybackType;
         private readonly RefRO<AnimationSetLink> _animationSetLink;
 
         public bool IsCurrentAnimationWithIndex(int index)
@@ -55,7 +55,7 @@ namespace NSprites
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (!foundAnimation)
-                throw new NSpritesException($"{nameof(AnimatorAspect)}.{nameof(SetAnimation)}: incorrect {nameof(setToAnimIndex)} was passed. {_entity} has no animation with such name ({animationName}) was found");
+                throw new NSpritesException($"{nameof(AnimationManager)}.{nameof(SetAnimation)}: incorrect {nameof(setToAnimIndex)} was passed. {_entity} has no animation with such name ({animationName}) was found");
 #endif
 
             // Remet à zéro les données et change l'animation.
@@ -70,7 +70,7 @@ namespace NSprites
         public void SetPlayback(int playback)
         {
 
-            if (playback == _animationPlaybackType.ValueRO.forward || playback == _animationPlaybackType.ValueRO.backward)
+            if (playback == (int)TypesLecture.lectureAvant || playback == (int)TypesLecture.lectureArriere)
             {
                 _animationState.ValueRW.playback = playback;
             }

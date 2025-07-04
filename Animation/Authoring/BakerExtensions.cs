@@ -96,12 +96,6 @@ namespace NSprites.Authoring
                 pause = initialAnim.pause
             });
 
-            baker.AddComponent(entity, new AnimationPlaybackType // Valeurs par défaut
-            {
-                forward = (int)SpriteAnimation.TypesLecture.lectureAvant,
-                backward = (int)SpriteAnimation.TypesLecture.lectureArriere,
-            });
-
             baker.AddComponent(entity, new IndexedAnimationsName
             {
                 indexedAnimationsNameCollection = blobMapAnimationsReference
