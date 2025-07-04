@@ -10,6 +10,8 @@ Il manque également de la documentation sur mes solutions implantées. Pour les
 
 Faite attention, veillez à bien vérifier la compatibilité des [API graphiques avec NSprites](https://github.com/Antoshidza/NSprites/wiki/Compatibility).
 
+---
+
 This package provides various solutions for Unity DOTS sprite rendering based on the [NSprites](https://github.com/Antoshidza/NSprites) package. While NSprites tries to be a flexible solution for all of your 2D sprite rendering needs, this project is more like a set of samples and useful tools. These tools may or may not be perfect for your use-case.
 
 ## How to Use
