@@ -17,25 +17,22 @@ namespace NSprites
         {
             public double Time;
 
-            private void Execute(ref AnimationTimer animationTimer,
-                                    ref FrameIndex frameIndex,
-                                    ref UVAtlas uvAtlas,
-                                    ref AnimationState animationState,
-                                    in AnimationSetLink animationSet,
-                                    in AnimationReference animationReference)
+            private void Execute(ref UVAtlas uvAtlas,
+                ref AnimationState animationState, 
+                in AnimationSetLink animationSet)
             {
 
                 // On ne change pas de trame si l'animation est en pause ou si du délais doit être écoulé.
-                var timerDelta = Time - animationTimer.value;
+                var timerDelta = Time - animationState.time;
                 if (timerDelta < 0f || animationState.pause) 
                     return;
 
-                ref var animData = ref animationSet.value.Value[animationReference.index];
+                ref var animData = ref animationSet.value.Value[animationState.animationIndex];
                 var playback = animationState.playback;
-                frameIndex.value = IncrementFrames(frameIndex.value, 1 * playback, animData.FrameCount);
+                animationState.frameIndex = IncrementFrames(animationState.frameIndex, 1 * playback, animData.FrameCount);
 
                 // On vérifie ici si l'animation à rencontré sa fin.
-                animationState.pause = frameIndex.value == 0 && !animationState.loop;
+                animationState.pause = animationState.frameIndex == 0 && !animationState.loop;
 
                 // Gère les pics de lag (EXPERIMENTAL)
                 var framesDuration = animationState.currentFramesDuration;
@@ -43,13 +40,13 @@ namespace NSprites
                 {
                     var extraTime = (float)(timerDelta % framesDuration); // Temps à rattraper
                     var decCount = (int)math.round((extraTime - framesDuration) / framesDuration); // Nombre de frames à passer
-                    frameIndex.value = IncrementFrames(frameIndex.value, decCount * playback, animData.FrameCount);
+                    animationState.frameIndex = IncrementFrames(animationState.frameIndex, decCount * playback, animData.FrameCount);
                 }
-                
-                animationTimer.value = Time + animData.FramesDuration;
+
+                animationState.time = Time + animData.FramesDuration;
 
                 // Mise à jour du découpage de la texture.
-                var textureFrameIndex = frameIndex.value + animData.FrameOffset;
+                var textureFrameIndex = animationState.frameIndex + animData.FrameOffset;
                 var frameSize = new float2(animData.UVAtlas.xy / animData.GridSize);
                 var framePosition = new int2(textureFrameIndex % animData.GridSize.x,
                     animData.GridSize.y - 1 - textureFrameIndex / animData.GridSize.x);

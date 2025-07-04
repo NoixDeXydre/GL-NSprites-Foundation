@@ -84,24 +84,21 @@ namespace NSprites.Authoring
 
             baker.AddComponent(entity, new AnimationSetLink { value = blobAssetReference });
 
-            baker.AddComponent(entity, new AnimationReference { index = initialAnimationIndex });
-            baker.AddComponent(entity, new AnimationTimer { value = initialAnim.FramesDuration });
-
             baker.AddComponent(entity, new AnimationState // Valeurs par défaut
             {
                 currentFramesDuration = initialAnim.FramesDuration,
                 currentAnimationDuration = initialAnim.AnimationDuration,
                 playback = initialAnim.playback,
                 loop = initialAnim.loop, 
-                pause = initialAnim.pause
+                pause = initialAnim.pause,
+                animationIndex = initialAnimationIndex,
+                time = initialAnim.FramesDuration
             });
 
             baker.AddComponent(entity, new IndexedAnimationsName
             {
                 indexedAnimationsNameCollection = blobMapAnimationsReference
             });
-
-            baker.AddComponent<FrameIndex>(entity);
             
             baker.AddComponent(entity, new MainTexSTInitial { value = initialAnim.UVAtlas });
 

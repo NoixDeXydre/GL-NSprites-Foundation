@@ -6,129 +6,134 @@ using static SpriteAnimation;
 namespace NSprites
 {
 
-    // TODO adapter pour cause d'obsolescence : https://docs.unity3d.com/Packages/com.unity.entities@1.4/manual/upgrade-guide.html#change-entitiesforeach-code
-
-    public readonly partial struct AnimationManager : IAspect
+    /// <summary>
+    /// Gère les animations d'une entité.
+    /// </summary>
+    public static class AnimationManager
     {
 
-        private readonly Entity _entity;
-
-        private readonly RefRW<AnimationReference> _animationReference;
-        private readonly RefRW<AnimationTimer> _animationTimer;
-        private readonly RefRW<FrameIndex> _frameIndex;
-        private readonly RefRW<AnimationState> _animationState;
-        private readonly RefRO<IndexedAnimationsName> _indexedAnimationsName;
-        private readonly RefRO<AnimationSetLink> _animationSetLink;
-
-        public bool IsCurrentAnimationWithIndex(int index)
+        public static bool IsCurrentAnimationWithIndex(ref AnimationState _animationState, int index)
         {
-            return _animationReference.ValueRO.index == index;
+            return _animationState.animationIndex == index;
         }
 
-        public bool IsCurrentAnimationWithName(FixedString64Bytes animationName)
+        public static bool IsCurrentAnimationWithName(ref AnimationState _animationState, FixedString64Bytes animationName)
         {
-            return _animationReference.ValueRO.animationName.Equals(animationName);
+            return _animationState.animationName.Equals(animationName);
         }
         
-        public void SetLoopState(bool isLoop)
+        public static void SetLoopState(ref AnimationState _animationState, bool isLoop)
         {
-            _animationState.ValueRW.loop = isLoop;
+            _animationState.loop = isLoop;
         }
 
-        public void SetPauseState(bool isPause)
+        public static void SetPauseState(ref AnimationState _animationState, bool isPause)
         {
-            _animationState.ValueRW.pause = isPause;
+            _animationState.pause = isPause;
         }
 
-        public void SetAnimation(FixedString64Bytes animationName, double worldTime, bool keepFrameIndex = false)
+        public static void SetAnimation(ref AnimationState _animationState,
+            in AnimationSetLink _animationSetLink,
+            in IndexedAnimationsName _indexedAnimationsName,
+            FixedString64Bytes animationName, double worldTime, bool keepFrameIndex = false)
         {
 
             // Change d'animation SEULEMENT SI ce n'est pas la même.
             // Il faut reset l'animation si voulez faire les deux.
-            if (IsCurrentAnimationWithName(animationName))
+            if (IsCurrentAnimationWithName(ref _animationState, animationName))
             {
                 return;
             }
 
-            ref var animSet = ref _animationSetLink.ValueRO.value.Value;
-            bool foundAnimation = _indexedAnimationsName.ValueRO.indexedAnimationsNameCollection.Value.TryGetValue(animationName, out int setToAnimIndex);
+            ref var animSet = ref _animationSetLink.value.Value;
+            bool foundAnimation = _indexedAnimationsName.indexedAnimationsNameCollection.Value
+                .TryGetValue(animationName, out int setToAnimIndex);
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (!foundAnimation)
-                throw new NSpritesException($"{nameof(AnimationManager)}.{nameof(SetAnimation)}: incorrect {nameof(setToAnimIndex)} was passed. {_entity} has no animation with such name ({animationName}) was found");
+                throw new NSpritesException($"{nameof(AnimationManager)}.{nameof(SetAnimation)}: incorrect {nameof(setToAnimIndex)} was passed. The entity has no animation with such name ({animationName}) was found");
 #endif
 
             // Remet à zéro les données et change l'animation.
             if (foundAnimation)
             {
-                _animationReference.ValueRW.index = setToAnimIndex;
-                _animationReference.ValueRW.animationName = animationName;
-                ResetAnimation(worldTime, keepFrameIndex);
+                _animationState.animationIndex = setToAnimIndex;
+                _animationState.animationName = animationName;
+                ResetAnimation(ref _animationState, _animationSetLink, worldTime, keepFrameIndex);
             }
         }
 
-        public void SetPlayback(int playback)
+        public static void SetPlayback(ref AnimationState _animationState, int playback)
         {
 
             if (playback == (int)TypesLecture.lectureAvant || playback == (int)TypesLecture.lectureArriere)
             {
-                _animationState.ValueRW.playback = playback;
+                _animationState.playback = playback;
             }
         }
 
-        public void SetFramesDuration(float framesDuration)
+        public static void SetFramesDuration(ref AnimationState _animationState,
+            RefRO<AnimationSetLink> _animationSetLink, float framesDuration)
         {
-            _animationState.ValueRW.currentFramesDuration = framesDuration;
-            _animationState.ValueRW.currentAnimationDuration = framesDuration 
-                * _animationSetLink.ValueRO.value.Value[_animationReference.ValueRO.index].FrameCount;
+            _animationState.currentFramesDuration = framesDuration;
+            _animationState.currentAnimationDuration = framesDuration 
+                * _animationSetLink.ValueRO.value.Value[_animationState.animationIndex].FrameCount;
         }
 
-        public void SetToFrame(int frameIndex, in double worldTime)
+        public static void SetToFrame(ref AnimationState _animationState, int frameIndex, in double worldTime)
         {
-            ref var animData = ref _animationSetLink.ValueRO.value.Value[_animationReference.ValueRO.index];
-            _frameIndex.ValueRW.value = frameIndex;
-            _animationTimer.ValueRW.value = worldTime - _animationState.ValueRO.currentFramesDuration;
+            _animationState.frameIndex = frameIndex;
+            _animationState.time = worldTime - _animationState.currentFramesDuration;
         }
 
-        public void ResetLoop() => 
-            _animationState.ValueRW.loop = GetCurrentAnimation().loop;
+        public static void ResetLoop(ref AnimationState _animationState,
+            in AnimationSetLink _animationSetLink) => 
+            _animationState.loop = GetCurrentAnimation(ref _animationState, _animationSetLink).loop;
 
-        public void ResetPause() =>
-            _animationState.ValueRW.pause = GetCurrentAnimation().pause;
+        public static void ResetPause(ref AnimationState _animationState,
+            in AnimationSetLink _animationSetLink) =>
+            _animationState.pause = GetCurrentAnimation(ref _animationState, _animationSetLink).pause;
 
-        public void ResetPlayback() =>
-            _animationState.ValueRW.playback = GetCurrentAnimation().playback;
+        public static void ResetPlayback(ref AnimationState _animationState,
+            in AnimationSetLink _animationSetLink) =>
+            _animationState.playback = GetCurrentAnimation(ref _animationState, _animationSetLink).playback;
 
-        public void ResetFramesDuration() =>
-            _animationState.ValueRW.currentFramesDuration = GetCurrentAnimation().FramesDuration;
+        public static void ResetFramesDuration(ref AnimationState _animationState,
+            in AnimationSetLink _animationSetLink) =>
+            _animationState.currentFramesDuration = GetCurrentAnimation(ref _animationState, _animationSetLink).FramesDuration;
 
-        public void ResetAnimationDuration() =>
-            _animationState.ValueRW.currentAnimationDuration = GetCurrentAnimation().AnimationDuration;
+        public static void ResetAnimationDuration(ref AnimationState _animationState,
+            in AnimationSetLink _animationSetLink) =>
+            _animationState.currentAnimationDuration = GetCurrentAnimation(ref _animationState, _animationSetLink).AnimationDuration;
 
-        public void ResetAnimation(double worldTime, bool keepFrameIndex = false)
+        public static void ResetAnimation(ref AnimationState _animationState,
+            in AnimationSetLink _animationSetLink,
+            double worldTime, bool keepFrameIndex = false)
         {
 
-            ResetLoop();
-            ResetPause();
-            ResetPlayback();
-            ResetFramesDuration();
-            ResetAnimationDuration();
+            ResetLoop(ref _animationState, _animationSetLink);
+            ResetPause(ref _animationState, _animationSetLink);
+            ResetPlayback(ref _animationState, _animationSetLink);
+            ResetFramesDuration(ref _animationState, _animationSetLink);
+            ResetAnimationDuration(ref _animationState, _animationSetLink);
 
             if (keepFrameIndex)
             {
 
                 // Evite de chevaucher les frames.
-                _frameIndex.ValueRW.value = math.clamp(_frameIndex.ValueRO.value, 0, GetCurrentAnimation().FrameCount - 1);
+                _animationState.frameIndex 
+                    = math.clamp(_animationState.frameIndex, 0, GetCurrentAnimation(ref _animationState, _animationSetLink).FrameCount - 1);
             }
             else
             {
-                SetToFrame(0, worldTime);
+                SetToFrame(ref _animationState, 0, worldTime);
             }
         }
 
-        private ref SpriteAnimationBlobData GetCurrentAnimation()
+        private static ref SpriteAnimationBlobData GetCurrentAnimation(ref AnimationState _animationState,
+            in AnimationSetLink _animationSetLink)
         {
-            return ref _animationSetLink.ValueRO.value.Value[_animationReference.ValueRO.index];
+            return ref _animationSetLink.value.Value[_animationState.animationIndex];
         }
     }
 }

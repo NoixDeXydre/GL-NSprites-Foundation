@@ -1,3 +1,4 @@
+using Unity.Collections;
 using Unity.Entities;
 
 /// <summary>
@@ -10,6 +11,12 @@ public struct AnimationState : IComponentData
 
     public float currentFramesDuration;
     public float currentAnimationDuration;
+
+    public int animationIndex;
+    public FixedString64Bytes animationName;
+
+    public int frameIndex;
+    public double time;
 
     public bool loop;
     public bool pause;
