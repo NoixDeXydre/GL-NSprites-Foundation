@@ -11,7 +11,7 @@ namespace NSprites.Authoring
         [SerializeField] public SpriteAnimationSet AnimationSet;
         [SerializeField] public int InitialAnimationIndex;
 
-        public SpriteAnimation InitialAnimationData => AnimationSet.Animations.ElementAt(InitialAnimationIndex).data; 
+        public SpriteAnimation InitialAnimationData => AnimationSet.Animations.ElementAt(InitialAnimationIndex); 
 
         public bool IsValid()
         {

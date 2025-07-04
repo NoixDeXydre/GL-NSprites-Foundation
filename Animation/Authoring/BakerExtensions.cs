@@ -44,21 +44,20 @@ namespace NSprites.Authoring
             foreach (var anim in animations)
             {
 
-                var animData = anim.data;
                 animationArray[animIndex] = new SpriteAnimationBlobData
                 {
 
-                    GridSize = animData.FrameCount,
-                    FrameRange = animData.FrameRange.IsDefault
-                        ? new int2(0, animData.FrameCount.x * animData.FrameCount.y)
-                        : animData.FrameRange,
-                    UVAtlas = NSpritesUtils.GetTextureST(animData.SpriteSheet),
-                    FramesDuration = animData.FramesDuration,
-                    AnimationDuration = animData.FramesDuration * animData.FrameCount.x * animData.FrameCount.y,
+                    GridSize = anim.FrameCount,
+                    FrameRange = anim.FrameRange.IsDefault
+                        ? new int2(0, anim.FrameCount.x * anim.FrameCount.y)
+                        : anim.FrameRange,
+                    UVAtlas = NSpritesUtils.GetTextureST(anim.SpriteSheet),
+                    FramesDuration = anim.FramesDuration,
+                    AnimationDuration = anim.FramesDuration * anim.FrameCount.x * anim.FrameCount.y,
 
-                    playback = animData.typeAnimation,
-                    loop = animData.animationABoucler,
-                    pause = animData.animationEnPause
+                    playback = anim.typeAnimation,
+                    loop = anim.animationABoucler,
+                    pause = anim.animationEnPause
                 };
 
                 animationMap.Add(anim.name, animIndex++);

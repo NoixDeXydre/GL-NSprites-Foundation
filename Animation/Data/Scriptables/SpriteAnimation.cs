@@ -18,6 +18,7 @@ public class SpriteAnimation : ScriptableObject
     [Serializable]
     public struct FrameRangeData
     {
+
         public int Offset;
         public int Count;
 
@@ -29,6 +30,9 @@ public class SpriteAnimation : ScriptableObject
     // Sprite here required because whe want to know UV of animation frame sequence on atlas
     [Tooltip("Texture représentant l'ensemble des animations")]
     public Sprite SpriteSheet;
+
+    [Tooltip("Nom du spritesheet (DOIT ETRE UNIQUE !!!)")]
+    public string nomAnimation = "MON_ANIMATION";
 
     [Tooltip("Set this index to frame count (rows and cols) of the whole texture even if it has multiple animations. It used to calculate UVs.")]
     public int2 FrameCount = new(1);
