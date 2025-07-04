@@ -1,5 +1,6 @@
 ﻿using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 
 namespace NSprites
 {
@@ -11,7 +12,7 @@ namespace NSprites
 
         private readonly Entity _entity;
 
-        private readonly RefRW<AnimationReference> _animationIndex;
+        private readonly RefRW<AnimationReference> _animationReference;
         private readonly RefRW<AnimationTimer> _animationTimer;
         private readonly RefRW<FrameIndex> _frameIndex;
         private readonly RefRW<AnimationState> _animationState;
@@ -19,6 +20,16 @@ namespace NSprites
         private readonly RefRO<AnimationPlaybackType> _animationPlaybackType;
         private readonly RefRO<AnimationSetLink> _animationSetLink;
 
+        public bool IsCurrentAnimationWithIndex(int index)
+        {
+            return _animationReference.ValueRO.index == index;
+        }
+
+        public bool IsCurrentAnimationWithName(FixedString64Bytes animationName)
+        {
+            return _animationReference.ValueRO.animationName.Equals(animationName);
+        }
+        
         public void SetLoopState(bool isLoop)
         {
             _animationState.ValueRW.loop = isLoop;
@@ -43,8 +54,8 @@ namespace NSprites
             // Remet à zéro les données et change l'animation.
             if (foundAnimation)
             {
-                _animationIndex.ValueRW.index = setToAnimIndex;
-                _animationIndex.ValueRW.animationName = animationName;
+                _animationReference.ValueRW.index = setToAnimIndex;
+                _animationReference.ValueRW.animationName = animationName;
                 ResetAnimation(worldTime, keepFrameIndex);
             }
         }
@@ -62,14 +73,14 @@ namespace NSprites
         {
             _animationState.ValueRW.currentFramesDuration = framesDuration;
             _animationState.ValueRW.currentAnimationDuration = framesDuration 
-                * _animationSetLink.ValueRO.value.Value[_animationIndex.ValueRO.index].FrameCount;
+                * _animationSetLink.ValueRO.value.Value[_animationReference.ValueRO.index].FrameCount;
         }
 
         public void SetToFrame(int frameIndex, in double worldTime)
         {
-            ref var animData = ref _animationSetLink.ValueRO.value.Value[_animationIndex.ValueRO.index];
+            ref var animData = ref _animationSetLink.ValueRO.value.Value[_animationReference.ValueRO.index];
             _frameIndex.ValueRW.value = frameIndex;
-            _animationTimer.ValueRW.value = worldTime + _animationState.ValueRO.currentFramesDuration;
+            _animationTimer.ValueRW.value = worldTime - _animationState.ValueRO.currentFramesDuration;
         }
 
         public void ResetLoop() => 
@@ -90,25 +101,27 @@ namespace NSprites
         public void ResetAnimation(double worldTime, bool keepFrameIndex = false)
         {
 
-            // Ne fait pas de sens si l'animation à un nombre de trames différentes.
-            if (keepFrameIndex)
-            {
-                SetToFrame(_animationIndex.ValueRO.index, worldTime);
-            } else
-            {
-                SetToFrame(0, worldTime);
-            }
-
             ResetLoop();
             ResetPause();
             ResetPlayback();
             ResetFramesDuration();
             ResetAnimationDuration();
+
+            if (keepFrameIndex)
+            {
+
+                // Evite de chevaucher les frames.
+                _frameIndex.ValueRW.value = math.clamp(_frameIndex.ValueRO.value, 0, GetCurrentAnimation().FrameCount - 1);
+            }
+            else
+            {
+                SetToFrame(0, worldTime);
+            }
         }
 
         private ref SpriteAnimationBlobData GetCurrentAnimation()
         {
-            return ref _animationSetLink.ValueRO.value.Value[_animationIndex.ValueRO.index];
+            return ref _animationSetLink.ValueRO.value.Value[_animationReference.ValueRO.index];
         }
     }
 }

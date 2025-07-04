@@ -22,7 +22,7 @@ namespace NSprites
                                     ref UVAtlas uvAtlas,
                                     ref AnimationState animationState,
                                     in AnimationSetLink animationSet,
-                                    in AnimationReference animationIndex)
+                                    in AnimationReference animationReference)
             {
 
                 // On ne change pas de trame si l'animation est en pause ou si du délais doit être écoulé.
@@ -30,7 +30,7 @@ namespace NSprites
                 if (timerDelta < 0f || animationState.pause) 
                     return;
 
-                ref var animData = ref animationSet.value.Value[animationIndex.index];
+                ref var animData = ref animationSet.value.Value[animationReference.index];
                 var playback = animationState.playback;
                 frameIndex.value = IncrementFrames(frameIndex.value, 1 * playback, animData.FrameCount);
 
