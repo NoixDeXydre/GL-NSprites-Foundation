@@ -22,28 +22,25 @@ namespace NSprites
                 in AnimationSetLink animationSet)
             {
 
-                // On ne change pas de trame si l'animation est en pause ou si du délais doit être écoulé.
-                var timerDelta = Time - animationState.time;
-                if (timerDelta < 0f || animationState.pause) 
+                // On s'arrête là en pause.
+                if (animationState.pause)
                     return;
 
                 ref var animData = ref animationSet.value.Value[animationState.animationIndex];
-                var playback = animationState.playback;
-                animationState.frameIndex = IncrementFrames(animationState.frameIndex, 1 * playback, animData.FrameCount);
-
-                // On vérifie ici si l'animation à rencontré sa fin.
-                animationState.pause = animationState.frameIndex == 0 && !animationState.loop;
-
-                // Gère les pics de lag (EXPERIMENTAL)
+                var timerDelta = Time - animationState.time;
                 var framesDuration = animationState.currentFramesDuration;
                 if (timerDelta >= framesDuration)
                 {
-                    var extraTime = (float)(timerDelta % framesDuration); // Temps à rattraper
-                    var decCount = (int)math.round((extraTime - framesDuration) / framesDuration); // Nombre de frames à passer
-                    animationState.frameIndex = IncrementFrames(animationState.frameIndex, decCount * playback, animData.FrameCount);
-                }
 
-                animationState.time = Time + animData.FramesDuration;
+                    // Avance le nombre de trames requises.
+                    int framesToAdvance = (int)(timerDelta / framesDuration);
+                    animationState.frameIndex = IncrementFrames(animationState.frameIndex,
+                        framesToAdvance * animationState.playback, animData.FrameCount);
+                    animationState.time += framesToAdvance * framesDuration;
+
+                    // On vérifie ici si l'animation à rencontré sa fin.
+                    animationState.pause = animationState.frameIndex == 0 && !animationState.loop;
+                }
 
                 // Mise à jour du découpage de la texture.
                 var textureFrameIndex = animationState.frameIndex + animData.FrameOffset;
