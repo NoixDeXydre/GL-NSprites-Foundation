@@ -3,11 +3,8 @@
 namespace NSprites
 {
 
-    // Ne devrait PAS changer
     public struct SpriteAnimationBlobData
     {
-
-        public int ID;
         public float4 UVAtlas;
         public int2 GridSize;
         public int2 FrameRange;

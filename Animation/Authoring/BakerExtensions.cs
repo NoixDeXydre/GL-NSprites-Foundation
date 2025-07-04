@@ -1,4 +1,5 @@
-﻿using Unity.Collections;
+﻿using CRL.BlobHashMaps;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -32,12 +33,13 @@ namespace NSprites.Authoring
                 return;
             }
             
-            #region création blob liste animations
+            #region création blob et map animation
             var blobBuilder = new BlobBuilder(Allocator.Temp); //can't use `using` keyword because there is extension which use this + ref
             ref var root = ref blobBuilder.ConstructRoot<BlobArray<SpriteAnimationBlobData>>();
             var animations = animationSet.Animations;
             var animationArray = blobBuilder.Allocate(ref root, animations.Count);
 
+            var animationMap = new NativeHashMap<FixedString64Bytes, int>(128, Allocator.Temp);
             var animIndex = 0;
             foreach (var anim in animations)
             {
@@ -45,7 +47,7 @@ namespace NSprites.Authoring
                 var animData = anim.data;
                 animationArray[animIndex] = new SpriteAnimationBlobData
                 {
-                    ID = Animator.StringToHash(anim.name),
+
                     GridSize = animData.FrameCount,
                     FrameRange = animData.FrameRange.IsDefault
                         ? new int2(0, animData.FrameCount.x * animData.FrameCount.y)
@@ -59,12 +61,21 @@ namespace NSprites.Authoring
                     pause = animData.animationEnPause
                 };
 
-                animIndex++;
+                animationMap.Add(anim.name, animIndex++);
             }
 
             var blobAssetReference = blobBuilder.CreateBlobAssetReference<BlobArray<SpriteAnimationBlobData>>(Allocator.Persistent);
             baker.AddBlobAsset(ref blobAssetReference, out _);
             blobBuilder.Dispose();
+
+            var builderMapAnimations = new BlobBuilder(Allocator.Temp);
+            ref var rootMapAnimations = ref builderMapAnimations.ConstructRoot<BlobHashMap<FixedString64Bytes, int>>();
+            builderMapAnimations.ConstructHashMap(ref rootMapAnimations, ref animationMap);
+
+            var blobMapAnimationsReference = builderMapAnimations.CreateBlobAssetReference<BlobHashMap<FixedString64Bytes, int>>(Allocator.Persistent);
+            baker.AddBlobAsset(ref blobMapAnimationsReference, out _);
+            builderMapAnimations.Dispose();
+
             #endregion
 
             #region ajout des composants
@@ -73,7 +84,7 @@ namespace NSprites.Authoring
 
             baker.AddComponent(entity, new AnimationSetLink { value = blobAssetReference });
 
-            baker.AddComponent(entity, new AnimationIndex { value = initialAnimationIndex });
+            baker.AddComponent(entity, new AnimationReference { index = initialAnimationIndex });
             baker.AddComponent(entity, new AnimationTimer { value = initialAnim.FramesDuration });
 
             baker.AddComponent(entity, new AnimationState // Valeurs par défaut
@@ -89,6 +100,11 @@ namespace NSprites.Authoring
             {
                 forward = (int)SpriteAnimation.TypesLecture.lectureAvant,
                 backward = (int)SpriteAnimation.TypesLecture.lectureArriere,
+            });
+
+            baker.AddComponent(entity, new IndexedAnimationsName
+            {
+                indexedAnimationsNameCollection = blobMapAnimationsReference
             });
 
             baker.AddComponent<FrameIndex>(entity);

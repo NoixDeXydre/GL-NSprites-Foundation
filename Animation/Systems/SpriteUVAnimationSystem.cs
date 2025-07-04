@@ -1,6 +1,6 @@
-﻿using Unity.Mathematics;
+﻿using Unity.Burst;
 using Unity.Entities;
-using Unity.Burst;
+using Unity.Mathematics;
 
 namespace NSprites
 {
@@ -22,7 +22,7 @@ namespace NSprites
                                     ref UVAtlas uvAtlas,
                                     ref AnimationState animationState,
                                     in AnimationSetLink animationSet,
-                                    in AnimationIndex animationIndex)
+                                    in AnimationReference animationIndex)
             {
 
                 // On ne change pas de trame si l'animation est en pause ou si du délais doit être écoulé.
@@ -30,7 +30,7 @@ namespace NSprites
                 if (timerDelta < 0f || animationState.pause) 
                     return;
 
-                ref var animData = ref animationSet.value.Value[animationIndex.value];
+                ref var animData = ref animationSet.value.Value[animationIndex.index];
                 var playback = animationState.playback;
                 frameIndex.value = IncrementFrames(frameIndex.value, 1 * playback, animData.FrameCount);
 
@@ -51,7 +51,8 @@ namespace NSprites
                 // Mise à jour du découpage de la texture.
                 var textureFrameIndex = frameIndex.value + animData.FrameOffset;
                 var frameSize = new float2(animData.UVAtlas.xy / animData.GridSize);
-                var framePosition = new int2(textureFrameIndex % animData.GridSize.x, animData.GridSize.y - 1 - textureFrameIndex / animData.GridSize.x);
+                var framePosition = new int2(textureFrameIndex % animData.GridSize.x,
+                    animData.GridSize.y - 1 - textureFrameIndex / animData.GridSize.x);
                 uvAtlas = new UVAtlas { value = new float4(frameSize, animData.UVAtlas.zw + frameSize * framePosition) };
             }
         }

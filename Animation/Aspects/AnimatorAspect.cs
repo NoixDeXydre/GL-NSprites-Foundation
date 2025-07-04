@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using Unity.Collections;
+using Unity.Entities;
 
 namespace NSprites
 {
@@ -7,10 +8,11 @@ namespace NSprites
 
         private readonly Entity _entity;
 
-        private readonly RefRW<AnimationIndex> _animationIndex;
+        private readonly RefRW<AnimationReference> _animationIndex;
         private readonly RefRW<AnimationTimer> _animationTimer;
         private readonly RefRW<FrameIndex> _frameIndex;
         private readonly RefRW<AnimationState> _animationState;
+        private readonly RefRO<IndexedAnimationsName> _indexedAnimationsName;
         private readonly RefRO<AnimationPlaybackType> _animationPlaybackType;
         private readonly RefRO<AnimationSetLink> _animationSetLink;
 
@@ -24,27 +26,22 @@ namespace NSprites
             _animationState.ValueRW.pause = isPause;
         }
 
-        public void SetAnimation(int toAnimationIndex, in double worldTime)
+        public void SetAnimation(FixedString64Bytes animationName, in double worldTime)
         {
-            // find animation by animation ID
+
             ref var animSet = ref _animationSetLink.ValueRO.value.Value;
-            var setToAnimIndex = -1;
-            for (int i = 0; i < animSet.Length; i++)
-                if (animSet[i].ID == toAnimationIndex)
-                {
-                    setToAnimIndex = i;
-                    break;
-                }
+            bool foundAnimation = _indexedAnimationsName.ValueRO.indexedAnimationsNameCollection.Value.TryGetValue(animationName, out int setToAnimIndex);
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-            if (setToAnimIndex == -1)
-                throw new NSpritesException($"{nameof(AnimatorAspect)}.{nameof(SetAnimation)}: incorrect {nameof(toAnimationIndex)} was passed. {_entity} has no animation with such ID ({toAnimationIndex}) was found");
+            if (foundAnimation)
+                throw new NSpritesException($"{nameof(AnimatorAspect)}.{nameof(SetAnimation)}: incorrect {nameof(setToAnimIndex)} was passed. {_entity} has no animation with such name ({animationName}) was found");
 #endif
 
             // Remet à zéro les données et change l'animation.
-            if (_animationIndex.ValueRO.value != setToAnimIndex)
+            if (foundAnimation)
             {
-                _animationIndex.ValueRW.value = setToAnimIndex;
+                _animationIndex.ValueRW.index = setToAnimIndex;
+                _animationIndex.ValueRW.animationName = animationName;
                 ResetAnimation(worldTime);
             }
         }
@@ -62,12 +59,12 @@ namespace NSprites
         {
             _animationState.ValueRW.currentFramesDuration = framesDuration;
             _animationState.ValueRW.currentAnimationDuration = framesDuration 
-                * _animationSetLink.ValueRO.value.Value[_animationIndex.ValueRO.value].FrameCount;
+                * _animationSetLink.ValueRO.value.Value[_animationIndex.ValueRO.index].FrameCount;
         }
 
         public void SetToFrame(int frameIndex, in double worldTime)
         {
-            ref var animData = ref _animationSetLink.ValueRO.value.Value[_animationIndex.ValueRO.value];
+            ref var animData = ref _animationSetLink.ValueRO.value.Value[_animationIndex.ValueRO.index];
             _frameIndex.ValueRW.value = frameIndex;
             _animationTimer.ValueRW.value = worldTime + _animationState.ValueRO.currentFramesDuration;
         }
@@ -99,7 +96,7 @@ namespace NSprites
 
         private ref SpriteAnimationBlobData GetCurrentAnimation()
         {
-            return ref _animationSetLink.ValueRO.value.Value[_animationIndex.ValueRO.value];
+            return ref _animationSetLink.ValueRO.value.Value[_animationIndex.ValueRO.index];
         }
     }
 }

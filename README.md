@@ -35,6 +35,7 @@ Also, before working with this package please read the [NSprites documentation](
 ### Requirements
 
 - [NSprites v4.0.0+](https://github.com/Antoshidza/NSprites)
+- [BlobHashMaps](https://github.com/CRLStudios/Unity-BlobHashMaps)
 - Unity v2022.2.3+
 - Universal RP v14.0.6+
 - Entities v1.0.0-pre.65+

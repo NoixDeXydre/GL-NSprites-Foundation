@@ -30,10 +30,10 @@ public class SpriteAnimation : ScriptableObject
     [Tooltip("Texture représentant l'ensemble des animations")]
     public Sprite SpriteSheet;
 
-    [Tooltip("Set this value to frame count (rows and cols) of the whole texture even if it has multiple animations. It used to calculate UVs.")]
+    [Tooltip("Set this index to frame count (rows and cols) of the whole texture even if it has multiple animations. It used to calculate UVs.")]
     public int2 FrameCount = new(1);
 
-    [Tooltip("Use this field to select frame sequence (by indexes) if your sprite sheet contains multiple animations. X for offset, Y for count. (0, 0) value takes all texture as default.")]
+    [Tooltip("Use this field to select frame sequence (by indexes) if your sprite sheet contains multiple animations. X for offset, Y for count. (0, 0) index takes all texture as default.")]
     public FrameRangeData FrameRange;
 
     [Tooltip("Durée de chaque frames en secondes")]
