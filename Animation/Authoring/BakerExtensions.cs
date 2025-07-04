@@ -60,7 +60,7 @@ namespace NSprites.Authoring
                     pause = anim.animationEnPause
                 };
 
-                animationMap.Add(anim.name, animIndex++);
+                animationMap.Add(anim.nomAnimation, animIndex++);
             }
 
             var blobAssetReference = blobBuilder.CreateBlobAssetReference<BlobArray<SpriteAnimationBlobData>>(Allocator.Persistent);
