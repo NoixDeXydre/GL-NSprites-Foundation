@@ -43,6 +43,13 @@ namespace NSprites
         public void SetAnimation(FixedString64Bytes animationName, double worldTime, bool keepFrameIndex = false)
         {
 
+            // Change d'animation SEULEMENT SI ce n'est pas la même.
+            // Il faut reset l'animation si voulez faire les deux.
+            if (IsCurrentAnimationWithName(animationName))
+            {
+                return;
+            }
+
             ref var animSet = ref _animationSetLink.ValueRO.value.Value;
             bool foundAnimation = _indexedAnimationsName.ValueRO.indexedAnimationsNameCollection.Value.TryGetValue(animationName, out int setToAnimIndex);
 
