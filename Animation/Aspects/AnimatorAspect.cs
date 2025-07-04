@@ -3,6 +3,9 @@ using Unity.Entities;
 
 namespace NSprites
 {
+
+    // TODO adapter pour cause d'obsolescence : https://docs.unity3d.com/Packages/com.unity.entities@1.4/manual/upgrade-guide.html#change-entitiesforeach-code
+
     public readonly partial struct AnimatorAspect : IAspect
     {
 
@@ -26,7 +29,7 @@ namespace NSprites
             _animationState.ValueRW.pause = isPause;
         }
 
-        public void SetAnimation(FixedString64Bytes animationName, in double worldTime)
+        public void SetAnimation(FixedString64Bytes animationName, double worldTime, bool keepFrameIndex = false)
         {
 
             ref var animSet = ref _animationSetLink.ValueRO.value.Value;
@@ -42,7 +45,7 @@ namespace NSprites
             {
                 _animationIndex.ValueRW.index = setToAnimIndex;
                 _animationIndex.ValueRW.animationName = animationName;
-                ResetAnimation(worldTime);
+                ResetAnimation(worldTime, keepFrameIndex);
             }
         }
 
@@ -84,9 +87,18 @@ namespace NSprites
         public void ResetAnimationDuration() =>
             _animationState.ValueRW.currentAnimationDuration = GetCurrentAnimation().AnimationDuration;
 
-        public void ResetAnimation(in double worldTime)
+        public void ResetAnimation(double worldTime, bool keepFrameIndex = false)
         {
-            SetToFrame(0, worldTime);
+
+            // Ne fait pas de sens si l'animation à un nombre de trames différentes.
+            if (keepFrameIndex)
+            {
+                SetToFrame(_animationIndex.ValueRO.index, worldTime);
+            } else
+            {
+                SetToFrame(0, worldTime);
+            }
+
             ResetLoop();
             ResetPause();
             ResetPlayback();
