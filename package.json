@@ -1,7 +1,7 @@
 {
-  "name": "com.noixdexydre.nsprites.foundation",
+  "name": "com.noixdexydre.gl.nsprites.foundation",
   "version": "1.2.0",
-  "displayName": "NSprites Foundation",
+  "displayName": "GL NSprites Foundation",
   "description": "Contains solutions based on NSprites package such as authoring sprite data, animation, sorting, culling systems.",
   "unity": "2022.2",
   "dependencies": {

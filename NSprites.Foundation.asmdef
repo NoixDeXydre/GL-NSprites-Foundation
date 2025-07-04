@@ -1,5 +1,5 @@
 {
-    "name": "NSprites.Foundation",
+    "name": "GL.NSprites.Foundation",
     "rootNamespace": "NSprites",
     "references": [
         "GUID:f834c4c08334395418a7ba1a04bfed76",
