@@ -33,7 +33,7 @@ namespace NSprites
             bool foundAnimation = _indexedAnimationsName.ValueRO.indexedAnimationsNameCollection.Value.TryGetValue(animationName, out int setToAnimIndex);
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-            if (foundAnimation)
+            if (!foundAnimation)
                 throw new NSpritesException($"{nameof(AnimatorAspect)}.{nameof(SetAnimation)}: incorrect {nameof(setToAnimIndex)} was passed. {_entity} has no animation with such name ({animationName}) was found");
 #endif
 
