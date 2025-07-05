@@ -6,9 +6,12 @@ namespace NSprites
     public struct SpriteAnimationBlobData
     {
 
+        // Concerne le canvas
         public float4 UVAtlas;
         public int2 GridSize;
         public float2 frameSize; // Taille des frames fixes, calculé lors du backing
+
+        public bool FlipX;
 
         public int2 FrameRange;
         public float FramesDuration;

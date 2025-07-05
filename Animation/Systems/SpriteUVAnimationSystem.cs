@@ -40,12 +40,23 @@ namespace NSprites
                 }
 
                 // Mise à jour du découpage de la texture.
+
                 var textureFrameIndex = animationState.FrameIndex + animData.FrameOffset;
                 var framePosition = new int2(textureFrameIndex % animData.GridSize.x,
                     animData.GridSize.y - 1 - textureFrameIndex / animData.GridSize.x);
+
+                // Tourne horizontalement le sprite si demandé.
+                float2 frameSize = animData.frameSize;
+                float2 frameOffset = animData.UVAtlas.zw + frameSize * framePosition;
+                if (animData.FlipX)
+                {
+                    frameOffset.x += frameSize.x;
+                    frameSize.x = -frameSize.x;
+                }
+
                 uvAtlas = new UVAtlas 
                 { 
-                    value = new float4(animData.frameSize, animData.UVAtlas.zw + animData.frameSize * framePosition) 
+                    value = new float4(frameSize, frameOffset) 
                 };
             }
         }

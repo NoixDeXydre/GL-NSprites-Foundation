@@ -55,6 +55,9 @@ namespace NSprites.Authoring
                         : anim.FrameRange,
                     UVAtlas = uv,
                     frameSize = new float2(new float2(uv.x, uv.y) / gridsize),
+
+                    FlipX = anim.flipX,
+
                     FramesDuration = anim.FramesDuration,
                     AnimationDuration = anim.FramesDuration * anim.FrameCount.x * anim.FrameCount.y,
 

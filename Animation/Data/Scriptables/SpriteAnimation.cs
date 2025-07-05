@@ -43,6 +43,9 @@ public class SpriteAnimation : ScriptableObject
     [Tooltip("Durée de chaque frames en secondes")]
     public float FramesDuration = 0f;
 
+    [Tooltip("Tourne horizontalement le sprite")]
+    public bool flipX;
+
     [Tooltip("Type d'animation lors de la lecture")]
     public int typeAnimation = (int)TypesLecture.lectureAvant;
 
