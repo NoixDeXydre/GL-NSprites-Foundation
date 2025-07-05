@@ -44,14 +44,17 @@ namespace NSprites.Authoring
             foreach (var anim in animations)
             {
 
+                var uv = NSpritesUtils.GetTextureST(anim.SpriteSheet);
+                var gridsize = anim.FrameCount;
                 animationArray[animIndex] = new SpriteAnimationBlobData
                 {
 
-                    GridSize = anim.FrameCount,
+                    GridSize = gridsize,
                     FrameRange = anim.FrameRange.IsDefault
                         ? new int2(0, anim.FrameCount.x * anim.FrameCount.y)
                         : anim.FrameRange,
-                    UVAtlas = NSpritesUtils.GetTextureST(anim.SpriteSheet),
+                    UVAtlas = uv,
+                    frameSize = new float2(new float2(uv.x, uv.y) / gridsize),
                     FramesDuration = anim.FramesDuration,
                     AnimationDuration = anim.FramesDuration * anim.FrameCount.x * anim.FrameCount.y,
 

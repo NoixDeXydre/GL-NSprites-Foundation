@@ -5,9 +5,6 @@ using Unity.Mathematics;
 namespace NSprites
 {
 
-    /// Compare <see cref="AnimationTimer"/> with global time and switch <see cref="FrameIndex"/> when timer expired.
-    /// Perform only not-culled entities. Restore <see cref="FrameIndex"/> and duration time for entities which be culled for some time.
-    /// Somehow calculations goes a bit wrong and unculled entities gets synchronized, don't know how to fix
     [BurstCompile]
     public partial struct SpriteUVAnimationSystem : ISystem
     {
@@ -44,10 +41,12 @@ namespace NSprites
 
                 // Mise à jour du découpage de la texture.
                 var textureFrameIndex = animationState.frameIndex + animData.FrameOffset;
-                var frameSize = new float2(animData.UVAtlas.xy / animData.GridSize);
                 var framePosition = new int2(textureFrameIndex % animData.GridSize.x,
                     animData.GridSize.y - 1 - textureFrameIndex / animData.GridSize.x);
-                uvAtlas = new UVAtlas { value = new float4(frameSize, animData.UVAtlas.zw + frameSize * framePosition) };
+                uvAtlas = new UVAtlas 
+                { 
+                    value = new float4(animData.frameSize, animData.UVAtlas.zw + animData.frameSize * framePosition) 
+                };
             }
         }
         
