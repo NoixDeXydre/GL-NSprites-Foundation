@@ -44,7 +44,7 @@ public class SpriteAnimation : ScriptableObject
     public float FramesDuration = 0f;
 
     [Tooltip("Type d'animation lors de la lecture")]
-    public int typeAnimation;
+    public int typeAnimation = (int)TypesLecture.lectureAvant;
 
     [Tooltip("Défini si l'animation doit boucler après sa dernière trame")]
     public bool animationABoucler;
