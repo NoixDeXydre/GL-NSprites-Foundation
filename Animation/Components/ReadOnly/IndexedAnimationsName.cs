@@ -6,6 +6,6 @@ namespace NSprites
 {
     public struct IndexedAnimationsName : IComponentData
     {
-        public BlobAssetReference<BlobHashMap<FixedString64Bytes, int>> indexedAnimationsNameCollection;
+        public BlobAssetReference<BlobHashMap<FixedString64Bytes, int>> IndexedAnimationsNameCollection;
     }
 }

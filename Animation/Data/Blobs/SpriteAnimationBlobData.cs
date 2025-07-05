@@ -14,10 +14,10 @@ namespace NSprites
         public float FramesDuration;
         public float AnimationDuration; // Calculé pendant le baking
 
-        public int playback;
+        public int Playback;
 
-        public bool loop;
-        public bool pause;
+        public bool Loop;
+        public bool Pause;
 
         public int FrameOffset => FrameRange.x;
         public int FrameCount => FrameRange.y;

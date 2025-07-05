@@ -7,18 +7,18 @@ using Unity.Entities;
 public struct AnimationState : IComponentData
 {
 
-    public int playback;
+    public int Playback;
 
-    public float currentFramesDuration;
-    public float currentAnimationDuration;
+    public float CurrentFramesDuration;
+    public float CurrentAnimationDuration;
 
-    public int animationIndex;
-    public FixedString64Bytes animationName;
+    public int AnimationIndex;
+    public FixedString64Bytes AnimationName;
 
-    public int frameIndex;
-    public double time;
+    public int FrameIndex;
+    public double Time;
 
-    public bool loop;
-    public bool pause;
+    public bool Loop;
+    public bool Pause;
 }
 

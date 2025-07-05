@@ -14,22 +14,22 @@ namespace NSprites
 
         public static bool IsCurrentAnimationWithIndex(ref AnimationState _animationState, int index)
         {
-            return _animationState.animationIndex == index;
+            return _animationState.AnimationIndex == index;
         }
 
         public static bool IsCurrentAnimationWithName(ref AnimationState _animationState, FixedString64Bytes animationName)
         {
-            return _animationState.animationName.Equals(animationName);
+            return _animationState.AnimationName.Equals(animationName);
         }
         
         public static void SetLoopState(ref AnimationState _animationState, bool isLoop)
         {
-            _animationState.loop = isLoop;
+            _animationState.Loop = isLoop;
         }
 
         public static void SetPauseState(ref AnimationState _animationState, bool isPause)
         {
-            _animationState.pause = isPause;
+            _animationState.Pause = isPause;
         }
 
         public static void SetAnimation(ref AnimationState _animationState,
@@ -46,7 +46,7 @@ namespace NSprites
             }
 
             ref var animSet = ref _animationSetLink.value.Value;
-            bool foundAnimation = _indexedAnimationsName.indexedAnimationsNameCollection.Value
+            bool foundAnimation = _indexedAnimationsName.IndexedAnimationsNameCollection.Value
                 .TryGetValue(animationName, out int setToAnimIndex);
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
@@ -57,8 +57,8 @@ namespace NSprites
             // Remet à zéro les données et change l'animation.
             if (foundAnimation)
             {
-                _animationState.animationIndex = setToAnimIndex;
-                _animationState.animationName = animationName;
+                _animationState.AnimationIndex = setToAnimIndex;
+                _animationState.AnimationName = animationName;
                 ResetAnimation(ref _animationState, _animationSetLink, worldTime, keepFrameIndex);
             }
         }
@@ -68,43 +68,43 @@ namespace NSprites
 
             if (playback == (int)TypesLecture.lectureAvant || playback == (int)TypesLecture.lectureArriere)
             {
-                _animationState.playback = playback;
+                _animationState.Playback = playback;
             }
         }
 
         public static void SetFramesDuration(ref AnimationState _animationState,
             RefRO<AnimationSetLink> _animationSetLink, float framesDuration)
         {
-            _animationState.currentFramesDuration = framesDuration;
-            _animationState.currentAnimationDuration = framesDuration 
-                * _animationSetLink.ValueRO.value.Value[_animationState.animationIndex].FrameCount;
+            _animationState.CurrentFramesDuration = framesDuration;
+            _animationState.CurrentAnimationDuration = framesDuration 
+                * _animationSetLink.ValueRO.value.Value[_animationState.AnimationIndex].FrameCount;
         }
 
         public static void SetToFrame(ref AnimationState _animationState, int frameIndex, in double worldTime)
         {
-            _animationState.frameIndex = frameIndex;
-            _animationState.time = worldTime - _animationState.currentFramesDuration;
+            _animationState.FrameIndex = frameIndex;
+            _animationState.Time = worldTime - _animationState.CurrentFramesDuration;
         }
 
         public static void ResetLoop(ref AnimationState _animationState,
             in AnimationSetLink _animationSetLink) => 
-            _animationState.loop = GetCurrentAnimation(ref _animationState, _animationSetLink).loop;
+            _animationState.Loop = GetCurrentAnimation(ref _animationState, _animationSetLink).Loop;
 
         public static void ResetPause(ref AnimationState _animationState,
             in AnimationSetLink _animationSetLink) =>
-            _animationState.pause = GetCurrentAnimation(ref _animationState, _animationSetLink).pause;
+            _animationState.Pause = GetCurrentAnimation(ref _animationState, _animationSetLink).Pause;
 
         public static void ResetPlayback(ref AnimationState _animationState,
             in AnimationSetLink _animationSetLink) =>
-            _animationState.playback = GetCurrentAnimation(ref _animationState, _animationSetLink).playback;
+            _animationState.Playback = GetCurrentAnimation(ref _animationState, _animationSetLink).Playback;
 
         public static void ResetFramesDuration(ref AnimationState _animationState,
             in AnimationSetLink _animationSetLink) =>
-            _animationState.currentFramesDuration = GetCurrentAnimation(ref _animationState, _animationSetLink).FramesDuration;
+            _animationState.CurrentFramesDuration = GetCurrentAnimation(ref _animationState, _animationSetLink).FramesDuration;
 
         public static void ResetAnimationDuration(ref AnimationState _animationState,
             in AnimationSetLink _animationSetLink) =>
-            _animationState.currentAnimationDuration = GetCurrentAnimation(ref _animationState, _animationSetLink).AnimationDuration;
+            _animationState.CurrentAnimationDuration = GetCurrentAnimation(ref _animationState, _animationSetLink).AnimationDuration;
 
         public static void ResetAnimation(ref AnimationState _animationState,
             in AnimationSetLink _animationSetLink,
@@ -121,8 +121,8 @@ namespace NSprites
             {
 
                 // Evite de chevaucher les frames.
-                _animationState.frameIndex 
-                    = math.clamp(_animationState.frameIndex, 0, GetCurrentAnimation(ref _animationState, _animationSetLink).FrameCount - 1);
+                _animationState.FrameIndex 
+                    = math.clamp(_animationState.FrameIndex, 0, GetCurrentAnimation(ref _animationState, _animationSetLink).FrameCount - 1);
             }
             else
             {
@@ -133,7 +133,7 @@ namespace NSprites
         private static ref SpriteAnimationBlobData GetCurrentAnimation(ref AnimationState _animationState,
             in AnimationSetLink _animationSetLink)
         {
-            return ref _animationSetLink.value.Value[_animationState.animationIndex];
+            return ref _animationSetLink.value.Value[_animationState.AnimationIndex];
         }
     }
 }

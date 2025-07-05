@@ -58,9 +58,9 @@ namespace NSprites.Authoring
                     FramesDuration = anim.FramesDuration,
                     AnimationDuration = anim.FramesDuration * anim.FrameCount.x * anim.FrameCount.y,
 
-                    playback = anim.typeAnimation,
-                    loop = anim.animationABoucler,
-                    pause = anim.animationEnPause
+                    Playback = anim.typeAnimation,
+                    Loop = anim.animationABoucler,
+                    Pause = anim.animationEnPause
                 };
 
                 animationMap.Add(anim.nomAnimation, animIndex++);
@@ -88,18 +88,18 @@ namespace NSprites.Authoring
 
             baker.AddComponent(entity, new AnimationState // Valeurs par défaut
             {
-                currentFramesDuration = initialAnim.FramesDuration,
-                currentAnimationDuration = initialAnim.AnimationDuration,
-                playback = initialAnim.playback,
-                loop = initialAnim.loop, 
-                pause = initialAnim.pause,
-                animationIndex = initialAnimationIndex,
-                time = initialAnim.FramesDuration
+                CurrentFramesDuration = initialAnim.FramesDuration,
+                CurrentAnimationDuration = initialAnim.AnimationDuration,
+                Playback = initialAnim.Playback,
+                Loop = initialAnim.Loop, 
+                Pause = initialAnim.Pause,
+                AnimationIndex = initialAnimationIndex,
+                Time = initialAnim.FramesDuration
             });
 
             baker.AddComponent(entity, new IndexedAnimationsName
             {
-                indexedAnimationsNameCollection = blobMapAnimationsReference
+                IndexedAnimationsNameCollection = blobMapAnimationsReference
             });
             
             baker.AddComponent(entity, new MainTexSTInitial { value = initialAnim.UVAtlas });

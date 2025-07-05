@@ -49,7 +49,7 @@ public class SpriteAnimation : ScriptableObject
     [Tooltip("Défini si l'animation doit boucler après sa dernière trame")]
     public bool animationABoucler;
 
-    [Tooltip("Défini si l'animation est en pause ou non")]
+    [Tooltip("Défini si l'animation est en Pause ou non")]
     public bool animationEnPause;
 
     #region Editor

@@ -20,27 +20,27 @@ namespace NSprites
             {
 
                 // On s'arrête là en pause.
-                if (animationState.pause)
+                if (animationState.Pause)
                     return;
 
-                ref var animData = ref animationSet.value.Value[animationState.animationIndex];
-                var timerDelta = Time - animationState.time;
-                var framesDuration = animationState.currentFramesDuration;
+                ref var animData = ref animationSet.value.Value[animationState.AnimationIndex];
+                var timerDelta = Time - animationState.Time;
+                var framesDuration = animationState.CurrentFramesDuration;
                 if (timerDelta >= framesDuration)
                 {
 
                     // Avance le nombre de trames requises.
                     int framesToAdvance = (int)(timerDelta / framesDuration);
-                    animationState.frameIndex = IncrementFrames(animationState.frameIndex,
-                        framesToAdvance * animationState.playback, animData.FrameCount);
-                    animationState.time += framesToAdvance * framesDuration;
+                    animationState.FrameIndex = IncrementFrames(animationState.FrameIndex,
+                        framesToAdvance * animationState.Playback, animData.FrameCount);
+                    animationState.Time += framesToAdvance * framesDuration;
 
                     // On vérifie ici si l'animation à rencontré sa fin.
-                    animationState.pause = animationState.frameIndex == 0 && !animationState.loop;
+                    animationState.Pause = animationState.FrameIndex == 0 && !animationState.Loop;
                 }
 
                 // Mise à jour du découpage de la texture.
-                var textureFrameIndex = animationState.frameIndex + animData.FrameOffset;
+                var textureFrameIndex = animationState.FrameIndex + animData.FrameOffset;
                 var framePosition = new int2(textureFrameIndex % animData.GridSize.x,
                     animData.GridSize.y - 1 - textureFrameIndex / animData.GridSize.x);
                 uvAtlas = new UVAtlas 
