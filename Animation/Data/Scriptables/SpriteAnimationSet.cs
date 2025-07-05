@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NestedAssets;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace NSprites
@@ -8,6 +9,7 @@ namespace NSprites
     {
 
         [SerializeField]
+        [NestedAssetsList]
         private SpriteAnimation[] _animations;
 
         public IReadOnlyCollection<SpriteAnimation> Animations => _animations;

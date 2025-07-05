@@ -38,6 +38,7 @@ Also, before working with this package please read the [NSprites documentation](
 
 - [NSprites v4.0.0+](https://github.com/Antoshidza/NSprites)
 - [BlobHashMaps](https://github.com/CRLStudios/Unity-BlobHashMaps)
+- [NestedAssets](https://github.com/Antoshidza/NestedAssets)
 - Unity v2022.2.3+
 - Universal RP v14.0.6+
 - Entities v1.0.0-pre.65+
