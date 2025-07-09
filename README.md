@@ -36,7 +36,7 @@ Also, before working with this package please read the [NSprites documentation](
 
 ### Requirements
 
-- [NSprites v4.0.0+](https://github.com/Antoshidza/NSprites)
+- [GL NSprites v4.0.0+](https://github.com/NoixDeXydre/GL-NSprites)
 - [BlobHashMaps](https://github.com/CRLStudios/Unity-BlobHashMaps)
 - [NestedAssets](https://github.com/Antoshidza/NestedAssets)
 - Unity v2022.2.3+
@@ -65,7 +65,7 @@ Also, before working with this package please read the [NSprites documentation](
 This guide will help you create a new project using NSprites Foundation, and render a single sprite to ensure the system is working.
 
 1. Create a new project using one of the supported Unity versions listed above. Make sure to use the 3D Cross-Platform URP template. The 2D URP project template is incompatible with the built-in shader in NSprites Foundation.
-2. Add [NSprites](https://github.com/Antoshidza/NSprites) to the project, using one of the recommended install methods. This will also automatically add the required ECS/DOTS packages to the repository if they have not yet been added.
+2. Add [NSprites](https://github.com/NoixDeXydre/GL-NSprites) to the project, using one of the recommended install methods. This will also automatically add the required ECS/DOTS packages to the repository if they have not yet been added.
 3. Add NSprites Foundation to the project, using one of the recommended install methods.
 4. Typically, it's a good idea to restart Unity at this point since you've sometimes added/updated Burst.
 5. Change the main camera to Orthographic view. Perspective view is incompatible with the built-in culling system. You may also want to change the scene view to 2D.
