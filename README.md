@@ -41,7 +41,7 @@ Also, before working with this package please read the [NSprites documentation](
 - [NestedAssets](https://github.com/Antoshidza/NestedAssets)
 - Unity v2022.2.3+
 - Universal RP v14.0.6+
-- Entities v1.0.0-pre.65+
+- Entities v1.0.16+
 
 ### [Install via Package Manager](https://docs.unity3d.com/2021.3/Documentation/Manual/upm-ui-giturl.html)
 
