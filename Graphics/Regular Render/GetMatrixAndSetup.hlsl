@@ -6,7 +6,6 @@ StructuredBuffer<float> _sortingValueBuffer;
 StructuredBuffer<float4x4> _positionBuffer;
 StructuredBuffer<float2> _pivotBuffer;
 StructuredBuffer<float2> _heightWidthBuffer;
-StructuredBuffer<int2> _flipBuffer;
 StructuredBuffer<float4> _colorBuffer;
 
 #define INSTANCING_ENABLED

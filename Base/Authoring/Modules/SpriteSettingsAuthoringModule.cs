@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace NSprites.Authoring
 {
+
     [Serializable]
     public class SpriteSettingsAuthoringModule
     {
@@ -21,16 +22,13 @@ namespace NSprites.Authoring
         [Tooltip("Prevents changing Size when Sprite changed")] public bool LockSize;
         public DrawModeType DrawMode;
         public float4 TilingAndOffset = new(1f, 1f, 0f, 0f);
-        public bool2 Flip;
-        public UnityEngine.Color Color = UnityEngine.Color.white;
+        public Color Color = Color.white;
 
         /// <summary>
         /// Bakes sprite default (for NSprites-Foundation package) such as
         /// <list type="bullet">
         /// <item><see cref="UVAtlas"/> and <see cref="UVTilingAndOffset"/></item>
         /// <item><see cref="Scale2D"/></item>
-        /// <item><see cref="Pivot"/></item>
-        /// <item><see cref="Flip"/></item>
         /// </list>
         /// </summary>
         /// <param name="baker">baker bruh</param>
@@ -51,9 +49,7 @@ namespace NSprites.Authoring
                 GetTilingAndOffsetByDrawMode(),
                 Pivot,
                 Size * nativeSize * new float2(authoringScale.x, authoringScale.y),
-                Color,
-                flipX: Flip.x,
-                flipY: Flip.y
+                Color
             );
         }
 

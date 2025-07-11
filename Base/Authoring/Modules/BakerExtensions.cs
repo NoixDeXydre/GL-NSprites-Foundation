@@ -45,7 +45,6 @@ namespace NSprites.Authoring
             baker.AddComponent(entity, new UVTilingAndOffset { value = uvTilingAndOffset });
             baker.AddComponent(entity, new Pivot { value = pivot });
             baker.AddComponent(entity, new Scale2D { value = scale });
-            baker.AddComponent(entity, new Flip { Value = new(flipX ? -1 : 0, flipY ? -1 : 0) });
             baker.AddComponent(entity, new ColorRGBA() { Value = color });
         }
     }
