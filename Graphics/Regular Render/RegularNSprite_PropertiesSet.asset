@@ -15,8 +15,6 @@ MonoBehaviour:
   propertiesRawData:
   - propertyName: _uvAtlasBuffer
     updateMode: 0
-  - propertyName: _uvTilingAndOffsetBuffer
-    updateMode: 0
   - propertyName: _sortingDataBuffer
     updateMode: 0
   - propertyName: _positionBuffer
