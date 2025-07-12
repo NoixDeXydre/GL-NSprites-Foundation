@@ -30,12 +30,19 @@ namespace NSprites.Authoring
             #region création blob et map animation
             var blobBuilder = new BlobBuilder(Allocator.Temp); //can't use `using` keyword because there is extension which use this + ref
             ref var root = ref blobBuilder.ConstructRoot<BlobArray<SpriteAnimationBlobData>>();
-            var animationsSets = animationsSetData.AnimationsSets;
-            var animationArray = blobBuilder.Allocate(ref root, animationsSets.Count);
+            var animationsSet = animationsSetData.AnimationsSets;
+
+            // TODO optimiser cette section en récupérant la longueur et le spritesheet.
+            // Ici on calcule le nombre d'animations à alouer dans le tableau.
+            var allocNumber = 0;
+            foreach (var set in animationsSet)
+                allocNumber += set.Animations.Length;
+
+            var animationArray = blobBuilder.Allocate(ref root, allocNumber);
 
             var animationMap = new NativeHashMap<FixedString64Bytes, int>(128, Allocator.Temp);
             var animIndex = 0;
-            foreach (var set in animationsSets)
+            foreach (var set in animationsSet)
             {
 
                 foreach(var animation in set.Animations)
