@@ -9,14 +9,16 @@ namespace NSprites
     [UpdateAfter(typeof(UpdateCullingDataSystem))]
     public partial struct FullScreenSpriteSystem : ISystem
     {
+
         [BurstCompile]
         [WithAll(typeof(FullScreenSpriteTag))]
         private partial struct RecalculateSpritesJob : IJobEntity
         {
+
             public float2 CameraPosition;
             public float2 ScreenSize;
             
-            private void Execute(ref Scale2D scale, ref LocalTransform transform, in NativeSpriteSize nativeSpriteSize)
+            private void Execute(ref Scale2D scale, ref LocalTransform transform)
             {
                 scale.value = ScreenSize;
                 transform.Scale = 1;

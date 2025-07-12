@@ -16,7 +16,6 @@ namespace NSprites
                 
                 var entity = GetEntity(TransformUsageFlags.None);
                 AddComponent<FullScreenSpriteTag>(entity);
-                AddComponent(entity, new NativeSpriteSize{ Value = authoring._spriteAuthoring.Sprite.GetNativeSizeWithUVAtlas() });
 
                 DependsOn(authoring._spriteAuthoring);
             }
