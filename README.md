@@ -38,7 +38,6 @@ Also, before working with this package please read the [NSprites documentation](
 
 - [GL NSprites v4.0.0+](https://github.com/NoixDeXydre/GL-NSprites)
 - [BlobHashMaps](https://github.com/CRLStudios/Unity-BlobHashMaps)
-- [NestedAssets](https://github.com/Antoshidza/NestedAssets)
 - [Simple Lit SG](https://github.com/gamebros0112/unity.zallist.universal-simple-lit-shadergraph-target)
 - Unity v2022.2.3+
 - Universal RP v14.0.6+

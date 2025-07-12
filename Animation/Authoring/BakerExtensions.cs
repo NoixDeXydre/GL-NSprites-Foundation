@@ -8,7 +8,7 @@ namespace NSprites.Authoring
 {
     public static partial class BakerExtensions
     {
-        public static void BakeAnimation<T>(this Baker<T> baker, in Entity entity, SpriteAnimationSet animationSet, int initialAnimationIndex = 0)
+        public static void BakeAnimation<T>(this Baker<T> baker, in Entity entity, SpriteAnimationsSets animationsSetData, string initialAnimationName)
             where T : Component
         {
             if(baker == null)
@@ -16,57 +16,55 @@ namespace NSprites.Authoring
                 Debug.LogError(new NSpritesException("Passed Baker is null"));
                 return;
             }
-            if (animationSet == null)
+            if (animationsSetData == null)
             {
-                Debug.LogError(new NSpritesException("Passed AnimationSet is null"));
+                Debug.LogError(new NSpritesException("Passed AnimationsSets is null"));
                 return;
             }
 
-            baker.DependsOn(animationSet);
+            baker.DependsOn(animationsSetData);
 
-            if (animationSet == null)
+            if (animationsSetData == null)
                 return;
-
-            if (initialAnimationIndex >= animationSet.Animations.Count || initialAnimationIndex < 0)
-            {
-                Debug.LogError(new NSpritesException($"Initial animation index {initialAnimationIndex} can't be less than 0 or great/equal to animation count {animationSet.Animations.Count}"));
-                return;
-            }
             
             #region création blob et map animation
             var blobBuilder = new BlobBuilder(Allocator.Temp); //can't use `using` keyword because there is extension which use this + ref
             ref var root = ref blobBuilder.ConstructRoot<BlobArray<SpriteAnimationBlobData>>();
-            var animations = animationSet.Animations;
-            var animationArray = blobBuilder.Allocate(ref root, animations.Count);
+            var animationsSets = animationsSetData.AnimationsSets;
+            var animationArray = blobBuilder.Allocate(ref root, animationsSets.Count);
 
             var animationMap = new NativeHashMap<FixedString64Bytes, int>(128, Allocator.Temp);
             var animIndex = 0;
-            foreach (var anim in animations)
+            foreach (var set in animationsSets)
             {
 
-                var uv = NSpritesUtils.GetTextureST(anim.SpriteSheet);
-                var gridsize = anim.FrameCount;
-                animationArray[animIndex] = new SpriteAnimationBlobData
+                foreach(var animation in set.Animations)
                 {
 
-                    GridSize = gridsize,
-                    FrameRange = anim.FrameRange.IsDefault
-                        ? new int2(0, anim.FrameCount.x * anim.FrameCount.y)
-                        : anim.FrameRange,
-                    UVAtlas = uv,
-                    frameSize = new float2(new float2(uv.x, uv.y) / gridsize),
+                    var uv = NSpritesUtils.GetTextureST(animation.SpriteSheet);
+                    var gridsize = animation.FrameCount;
+                    animationArray[animIndex] = new SpriteAnimationBlobData
+                    {
 
-                    FlipX = anim.flipX,
+                        GridSize = gridsize,
+                        FrameRange = animation.FrameRange.IsDefault
+                            ? new int2(0, animation.FrameCount.x * animation.FrameCount.y)
+                            : animation.FrameRange,
+                        UVAtlas = uv,
+                        frameSize = new float2(new float2(uv.x, uv.y) / gridsize),
 
-                    FramesDuration = anim.FramesDuration,
-                    AnimationDuration = anim.FramesDuration * anim.FrameCount.x * anim.FrameCount.y,
+                        FlipX = animation.flipX,
 
-                    Playback = anim.typeAnimation,
-                    Loop = anim.animationABoucler,
-                    Pause = anim.animationEnPause
-                };
+                        FramesDuration = animation.FramesDuration,
+                        AnimationDuration = animation.FramesDuration * animation.FrameCount.x * animation.FrameCount.y,
 
-                animationMap.Add(anim.nomAnimation, animIndex++);
+                        Playback = animation.typeAnimation,
+                        Loop = animation.animationABoucler,
+                        Pause = animation.animationEnPause
+                    };
+
+                    animationMap.Add(animation.nomAnimation, animIndex++);
+                }
             }
 
             var blobAssetReference = blobBuilder.CreateBlobAssetReference<BlobArray<SpriteAnimationBlobData>>(Allocator.Persistent);
@@ -85,6 +83,7 @@ namespace NSprites.Authoring
 
             #region ajout des composants
 
+            var initialAnimationIndex = blobMapAnimationsReference.Value[initialAnimationName];
             ref var initialAnim = ref blobAssetReference.Value[initialAnimationIndex];
 
             baker.AddComponent(entity, new AnimationSetLink { value = blobAssetReference });

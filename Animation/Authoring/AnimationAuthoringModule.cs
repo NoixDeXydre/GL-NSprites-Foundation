@@ -1,43 +1,34 @@
 ﻿using System;
-using System.Linq;
 using Unity.Entities;
 using UnityEngine;
 
 namespace NSprites.Authoring
 {
+
     [Serializable]
     public struct AnimationAuthoringModule
     {
-        [SerializeField] public SpriteAnimationSet AnimationSet;
-        [SerializeField] public int InitialAnimationIndex;
 
-        public SpriteAnimation InitialAnimationData => AnimationSet.Animations.ElementAt(InitialAnimationIndex); 
+        [SerializeField] public SpriteAnimationsSets AnimationsSets;
+        [SerializeField] public string InitialAnimationName;
 
-        public bool IsValid()
+        public SpriteAnimation GetInitialData()
         {
-            if (AnimationSet == null)
+
+            foreach (var set in AnimationsSets.AnimationsSets)
             {
-                Debug.LogWarning(new NSpritesException($"{nameof(AnimationSet)} is null"));
-                return false;
+                foreach (var animation in set.Animations)
+                {
+                    if (animation.nomAnimation.Equals(InitialAnimationName))
+                        return animation;
+                }
             }
 
-            if (InitialAnimationIndex >= AnimationSet.Animations.Count)
-            {
-                Debug.LogWarning(new NSpritesException($"{nameof(InitialAnimationIndex)} can't be greater than animations count. {nameof(InitialAnimationIndex)}: {InitialAnimationIndex}, animation count: {AnimationSet.Animations.Count}"));
-                return false;
-            }
-
-            if (InitialAnimationIndex < 0)
-            {
-                Debug.LogWarning(new NSpritesException($"{nameof(InitialAnimationIndex)} can't be lower 0. Currently it is {InitialAnimationIndex}"));
-                return false;
-            }
-
-            return AnimationSet.IsValid(InitialAnimationData.SpriteSheet.texture);
+            return null;
         }
-        
+
         public void Bake<TAuthoring>(Baker<TAuthoring> baker)
             where TAuthoring : MonoBehaviour
-            => baker.BakeAnimation(baker.GetEntity(TransformUsageFlags.None), AnimationSet, InitialAnimationIndex);
+            => baker.BakeAnimation(baker.GetEntity(TransformUsageFlags.None), AnimationsSets, InitialAnimationName);
     }
 }

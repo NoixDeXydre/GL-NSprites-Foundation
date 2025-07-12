@@ -14,10 +14,15 @@ namespace NSprites
         {
             public override void Bake(SpriteAnimatedRendererAuthoring authoring)
             {
+
                 if(!authoring.IsValid)
                     return;
                 
-                var initialAnimData = authoring.AnimationAuthoringModule.InitialAnimationData;
+                var initialAnimData = authoring.AnimationAuthoringModule.GetInitialData();
+                if (initialAnimData == null)
+                    return;
+
+
                 var initialSheetUVAtlas = (float4)NSpritesUtils.GetTextureST(initialAnimData.SpriteSheet);
                 var initialFrameUVAtlas = new float4(new float2(initialSheetUVAtlas.xy / initialAnimData.FrameCount), initialSheetUVAtlas.zw);
                 var frameSize = initialAnimData.SpriteSheet.GetNativeSize(initialSheetUVAtlas.xy) / initialAnimData.FrameCount;
@@ -44,7 +49,7 @@ namespace NSprites
                     return false;
                 }
 
-                return AnimationAuthoringModule.IsValid();
+                return true;
             }
         }
     }
