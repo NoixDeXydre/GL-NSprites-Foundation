@@ -19,10 +19,6 @@ namespace NSprites
                     return;
                 
                 var initialAnimData = authoring.AnimationAuthoringModule.GetInitialData();
-                if (initialAnimData == null)
-                    return;
-
-
                 var initialSheetUVAtlas = (float4)NSpritesUtils.GetTextureST(initialAnimData.SpriteSheet);
                 var initialFrameUVAtlas = new float4(new float2(initialSheetUVAtlas.xy / initialAnimData.FrameCount), initialSheetUVAtlas.zw);
                 var frameSize = initialAnimData.SpriteSheet.GetNativeSize(initialSheetUVAtlas.xy) / initialAnimData.FrameCount;

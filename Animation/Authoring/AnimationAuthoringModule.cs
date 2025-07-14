@@ -24,7 +24,7 @@ namespace NSprites.Authoring
                 }
             }
 
-            return null;
+            throw new NSpritesException($"L'animation appelée '{InitialAnimationName}' n'a pas été trouvée");
         }
 
         public void Bake<TAuthoring>(Baker<TAuthoring> baker)
