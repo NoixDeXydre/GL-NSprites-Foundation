@@ -8,6 +8,11 @@ Ce fork de NSprites Foundation est ciblée sur mon jeu Garden Lies. Il vise à :
 Je ne garantis pas le fonctionnement de la librairie avec d'autres potentielles utilisations.  
 Il manque également de la documentation sur mes solutions implantées. Pour les intéressés, je vous invite donc à observer le code de ce projet.
 
+Préférez plutôt le sorting via la position Z sur GL Sprites Foundation :  
+- Dans les versions 1.0.1+, le sorting sur Z ne marche plus.
+- Dans les versions 1.4.X+, le sorting et le culling sont complètement enlevés.
+
+
 Faite attention, veillez à bien vérifier la compatibilité des [API graphiques avec NSprites](https://github.com/Antoshidza/NSprites/wiki/Compatibility).
 
 ---
