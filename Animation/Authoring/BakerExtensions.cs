@@ -110,8 +110,6 @@ namespace NSprites.Authoring
             {
                 IndexedAnimationsNameCollection = blobMapAnimationsReference
             });
-            
-            baker.AddComponent(entity, new MainTexSTInitial { value = initialAnim.UVAtlas });
 
             #endregion
         }
