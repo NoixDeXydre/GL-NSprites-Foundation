@@ -8,8 +8,8 @@ namespace NSprites
     [BurstCompile]
     public partial struct SpriteUVAnimationSystem : ISystem
     {
+
         [BurstCompile]
-        [WithNone(typeof(CullSpriteTag))]
         private partial struct AnimationJob : IJobEntity
         {
             public double Time;
