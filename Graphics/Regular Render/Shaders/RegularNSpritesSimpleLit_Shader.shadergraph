@@ -670,8 +670,8 @@
     "m_ObjectId": "09ef3b95b6c84b63b00cba5319f3d018",
     "m_Title": "Atlasing",
     "m_Position": {
-        "x": -1293.5999755859375,
-        "y": 383.20001220703127
+        "x": -1293.60009765625,
+        "y": 383.2000732421875
     }
 }
 
@@ -1705,7 +1705,7 @@
     "m_Group": {
         "m_Id": ""
     },
-    "m_Name": "GetColors (Custom Function)",
+    "m_Name": "Colors (Custom Function)",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -1735,9 +1735,9 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     },
-    "m_SourceType": 1,
-    "m_FunctionName": "GetColors",
-    "m_FunctionSource": "",
+    "m_SourceType": 0,
+    "m_FunctionName": "Colors",
+    "m_FunctionSource": "556c64c474394699bc0acda9175051ba",
     "m_FunctionSourceUsePragmas": true,
     "m_FunctionBody": "#ifdef INSTANCING_ENABLED\ncolors = _colorBuffer[index];\n#else\ncolors = (float4)1;\n#endif"
 }
@@ -1803,8 +1803,8 @@
     "m_ObjectId": "974bc9d4ceae4533b26c6a3cbc6d1634",
     "m_Title": "Instancing + Matrix setup",
     "m_Position": {
-        "x": -229.5999755859375,
-        "y": 268.800048828125
+        "x": -229.60009765625,
+        "y": 268.8001708984375
     }
 }
 

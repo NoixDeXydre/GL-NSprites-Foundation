@@ -637,8 +637,8 @@
     "m_ObjectId": "09ef3b95b6c84b63b00cba5319f3d018",
     "m_Title": "Atlasing",
     "m_Position": {
-        "x": -1293.5999755859375,
-        "y": 383.20001220703127
+        "x": -1293.6002197265625,
+        "y": 383.2000732421875
     }
 }
 
@@ -1623,7 +1623,7 @@
     "m_Group": {
         "m_Id": ""
     },
-    "m_Name": "GetColors (Custom Function)",
+    "m_Name": "Colors (Custom Function)",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -1653,9 +1653,9 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     },
-    "m_SourceType": 1,
-    "m_FunctionName": "GetColors",
-    "m_FunctionSource": "",
+    "m_SourceType": 0,
+    "m_FunctionName": "Colors",
+    "m_FunctionSource": "556c64c474394699bc0acda9175051ba",
     "m_FunctionSourceUsePragmas": true,
     "m_FunctionBody": "#ifdef INSTANCING_ENABLED\ncolors = _colorBuffer[index];\n#else\ncolors = (float4)1;\n#endif"
 }
@@ -1721,8 +1721,8 @@
     "m_ObjectId": "974bc9d4ceae4533b26c6a3cbc6d1634",
     "m_Title": "Instancing + Matrix setup",
     "m_Position": {
-        "x": -229.5999755859375,
-        "y": 268.800048828125
+        "x": -229.6002655029297,
+        "y": 268.8000793457031
     }
 }
 
@@ -2261,6 +2261,12 @@
 }
 
 {
+    "m_SGVersion": 2,
+    "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalUnlitSubTarget",
+    "m_ObjectId": "dec6490a80974ce2a91774bf26967309"
+}
+
+{
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.BlockNode",
     "m_ObjectId": "e0b5558670d34cf189a04c7bc7d2c80a",
@@ -2375,7 +2381,7 @@
     "m_ObjectId": "e760e334f879489f855664f80dd46dcb",
     "m_Datas": [],
     "m_ActiveSubTarget": {
-        "m_Id": "e9adc3f5b49240898ea7bb141eac3e6d"
+        "m_Id": "dec6490a80974ce2a91774bf26967309"
     },
     "m_AllowMaterialOverride": false,
     "m_SurfaceType": 1,
@@ -2383,7 +2389,7 @@
     "m_ZWriteControl": 0,
     "m_AlphaMode": 0,
     "m_RenderFace": 0,
-    "m_AlphaClip": true,
+    "m_AlphaClip": false,
     "m_CastShadows": true,
     "m_ReceiveShadows": true,
     "m_DisableTint": false,
@@ -2428,12 +2434,6 @@
     "m_Property": {
         "m_Id": "6449234a07194b64b81daba3b4705882"
     }
-}
-
-{
-    "m_SGVersion": 2,
-    "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalUnlitSubTarget",
-    "m_ObjectId": "e9adc3f5b49240898ea7bb141eac3e6d"
 }
 
 {

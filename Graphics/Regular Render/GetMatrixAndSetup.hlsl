@@ -41,6 +41,15 @@ void PropertyPointer_float(in float instanceID, out float index)
 #endif
 }
 
+void Colors_float(in float index, out float4 colors)
+{
+#ifdef INSTANCING_ENABLED
+    colors = _colorBuffer[index];
+#else
+    colors = (float4) 1;
+#endif
+}
+
 void UV_float(in float index, out float4 uv)
 {
 #ifdef INSTANCING_ENABLED
