@@ -2,7 +2,6 @@
 StructuredBuffer<int> _propertyPointers;
 StructuredBuffer<float4> _uvTilingAndOffsetBuffer;
 StructuredBuffer<float4> _uvAtlasBuffer;
-StructuredBuffer<float> _sortingValueBuffer;
 StructuredBuffer<float4x4> _positionBuffer;
 StructuredBuffer<float2> _pivotBuffer;
 StructuredBuffer<float2> _heightWidthBuffer;

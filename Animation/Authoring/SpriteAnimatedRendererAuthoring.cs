@@ -30,14 +30,12 @@ namespace NSprites
                 authoring.RegisterSpriteData.Bake(this, initialAnimData.SpriteSheet.texture);
                 authoring.AnimationAuthoringModule.Bake(this);
                 authoring.RenderSettings.Bake(this, authoring, frameSize, initialFrameUVAtlas);
-                authoring.Sorting.Bake(this);
             }
         }
 
         [SerializeField] public AnimationAuthoringModule AnimationAuthoringModule;
         [SerializeField] public RegisterSpriteAuthoringModule RegisterSpriteData;
         [SerializeField] public SpriteSettingsAuthoringModule RenderSettings;
-        [SerializeField] public SortingAuthoringModule Sorting;
 
         protected virtual bool IsValid
         {

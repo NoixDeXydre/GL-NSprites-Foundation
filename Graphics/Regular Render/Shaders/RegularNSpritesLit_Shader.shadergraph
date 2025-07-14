@@ -673,8 +673,8 @@
     "m_ObjectId": "09ef3b95b6c84b63b00cba5319f3d018",
     "m_Title": "Atlasing",
     "m_Position": {
-        "x": -1293.599853515625,
-        "y": 383.20001220703127
+        "x": -1293.5999755859375,
+        "y": 383.199951171875
     }
 }
 
@@ -1942,8 +1942,8 @@
     "m_ObjectId": "974bc9d4ceae4533b26c6a3cbc6d1634",
     "m_Title": "Instancing + Matrix setup",
     "m_Position": {
-        "x": -229.5999298095703,
-        "y": 268.800048828125
+        "x": -229.60003662109376,
+        "y": 268.8000183105469
     }
 }
 
@@ -2744,7 +2744,7 @@
     "m_AllowMaterialOverride": false,
     "m_SurfaceType": 1,
     "m_ZTestMode": 4,
-    "m_ZWriteControl": 0,
+    "m_ZWriteControl": 1,
     "m_AlphaMode": 0,
     "m_RenderFace": 0,
     "m_AlphaClip": true,
