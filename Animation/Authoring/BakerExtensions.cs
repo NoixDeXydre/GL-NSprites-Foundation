@@ -32,7 +32,6 @@ namespace NSprites.Authoring
             ref var root = ref blobBuilder.ConstructRoot<BlobArray<SpriteAnimationBlobData>>();
             var animationsSet = animationsSetData.AnimationsSets;
 
-            // TODO optimiser cette section en récupérant la longueur et le spritesheet.
             // Ici on calcule le nombre d'animations à alouer dans le tableau.
             var allocNumber = 0;
             foreach (var set in animationsSet)
@@ -40,7 +39,7 @@ namespace NSprites.Authoring
 
             var animationArray = blobBuilder.Allocate(ref root, allocNumber);
 
-            var animationMap = new NativeHashMap<FixedString64Bytes, int>(128, Allocator.Temp);
+            var animationMap = new NativeHashMap<FixedString64Bytes, int>(allocNumber, Allocator.Temp);
             var animIndex = 0;
             foreach (var set in animationsSet)
             {
